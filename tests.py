@@ -19,5 +19,7 @@ flow2use = flowdata["L06_347"]
 
 temp = HydroAnalysis(flowdata)#, datacols=['LS06_342'])
 
+#example of concatenated selection of the time series:
+subset1 = temp.get_season("summer").get_year("2010").get_recess()
 
 #! test for both single column as multicolumn

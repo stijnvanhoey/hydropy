@@ -91,7 +91,7 @@ class HydroAnalysis():
                       run the set_frequency to define the frequency!")
 
         # names of columns to use as data column for specific functions
-        if datacols != None:
+        if datacols is not None:
             #check fo existence
             for colname in datacols:
                 if not colname in self.data.columns:
