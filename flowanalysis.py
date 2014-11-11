@@ -120,11 +120,11 @@ class HydroAnalysis():
         message = 'Data columns '
         for name in self.data_cols:
             message += name + ', '
-        message += 'ranging from ' + \
+        message += '\n ranging from ' + \
                         self._start_date.strftime("%H:%M:%S %d/%m/%Y") + \
                         ' till ' + \
                         self._end_date.strftime("%H:%M:%S %d/%m/%Y")
-        message += ' with frequency ' + self.data.index.freqstr
+        message += '\n with frequency ' + self.data.index.freqstr
         return message
 
     def __getitem__(self, val):
@@ -168,7 +168,7 @@ class HydroAnalysis():
 
     def frequency_resample(self, *args, **kwargs):
         """
-        Link to the pandas esample function
+        Pipe to the pandas resample function
 
         Examples
         ---------
@@ -178,23 +178,27 @@ class HydroAnalysis():
                               datacols=self.data_cols)
 
     def summary(self):
-        """
-        Returns summary/description of the data
+        """returns summary/description of the data
+
+        Notes
+        ------
+        Following R based summary function instead of pandas describe
+
         """
         return self.data.describe()
 
     def head(self, n=5):
-        """
+        """piping pandas head function
         """
         return self.data.head(n)
 
     def tail(self, n=5):
-        """
+        """piping pandas tail function
         """
         return self.data.tail(n)
 
     def plot(self, *args, **kwargs):
-        """quick pandas supported plot
+        """quick pandas supported plot function
         """
         return self.data.plot(*args, **kwargs)
 
@@ -242,9 +246,10 @@ class HydroAnalysis():
         return cls(flowserie)
 
     @staticmethod
-    def info_season_dates(hemisphere="north", definition_type="meteo"):
+    def info_season_dates(hemisphere, definition_type):
         """
-        Get start date info for seasonal date selection.
+        Get start date info for seasonal date selection under given
+        options.
 
         Parameters
         -----------
@@ -287,8 +292,7 @@ class HydroAnalysis():
     def current_season_dates(self):
         """print info about current used season start dates
         """
-        return self.info_season_dates(hemisphere=self._hemisphere,
-                                     definition_type=self._season_type)
+        return self.info_season_dates(self._hemisphere, self._season_type)
 
     @staticmethod
     def season_dates(season, year, seasondates):
