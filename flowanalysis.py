@@ -6,6 +6,7 @@ Created on Wed Nov 27 18:14:28 2013
 """
 
 import datetime
+import calendar
 
 import numpy as np
 import pandas as pd
@@ -145,6 +146,30 @@ class HydroAnalysis():
                                                     could not be parsed.")
         if date2test < self._start_date or date2test > self._end_date:
             raise Exception("Provided date outside date range!")
+
+    @staticmethod
+    def _existing_month(month):
+        """control for existing month, input can be integer, abbreviation
+        or full name of month
+        """
+        mabbr_dict = dict((v, k) for k, v in enumerate(calendar.month_abbr))
+        mname_dict = dict((v, k) for k, v in enumerate(calendar.month_name))
+
+        if isinstance(month, int):
+            if month > 0 and month < 13:
+                monthsel = month
+            else:
+                raise calendar.IllegalMonthError(month)
+
+        elif isinstance(month, str):
+            month = month.capitalize()
+            if month in calendar.month_abbr:
+                    monthsel = mabbr_dict[month]
+            elif month in calendar.month_name:
+                    monthsel = mname_dict[month]
+            else:
+                raise calendar.IllegalMonthError(month)
+        return monthsel
 
     def frequency_change(self, freq="15T", *args, **kwargs):
         """
@@ -315,6 +340,19 @@ class HydroAnalysis():
         obsmod.columns = ["obs","mod"]
         return obsmod.dropna()
 
+    def _mask_seasons(self):
+        """
+        Add column to data-sets with the season information
+        """
+        self.data["season"] = None
+        seasons = self.current_season_dates()
+        for year in self._years:
+            for season in seasons.keys():
+                season_start, \
+                    season_end = self.season_dates(season, str(year),
+                                                       seasons)
+                self.data[season_start : season_end]["season"] = season
+
     def get_date_range(self, start, end):
         """
         Link to pandas dataframe index date selection
@@ -340,13 +378,35 @@ class HydroAnalysis():
 
         return self.__getitem__(year)
 
+    def get_month(self, month):
+        """
+        Select a subset of the timeserie by selecting all data of a specific
+        month
+
+        Parameters
+        -----------
+        month : str, int
+            The month to select (integer, abbr of full name)
+        """
+        month_id = self._existing_month(month)
+        df = self.data.groupby(lambda x: x.month).get_group(month_id)
+        df = df.asfreq(self.data.index.freq)
+        return self.__class__(df, datacols=self.data_cols)
+
     def get_season(self, season):
         """
-        If year is defined, only season of that year is selected,
-        otherwise, all seasons from different years are pasted together.
+        Select the data of a specific season (summer, winter, spring or
+        autumn)
 
-        For winter, the year selected is from december of the previous year,
-        till march of the selected year.
+        Parameters
+        ----------
+        season : summer | winter | spring | autumn
+            The season to select
+
+        Notes
+        -----
+        For winter, the year selected is from december of the previous
+        year, till march of the selected year.
         """
         season = season.capitalize()
         #return self.__class__(self.data[self.data["season"] == season])
@@ -354,21 +414,10 @@ class HydroAnalysis():
         df = df.asfreq(self.data.index.freq)
         return self.__class__(df, datacols=self.data_cols)
 
-    def _mask_seasons(self):
-        """
-        Add column to data-sets with the season information
-        """
-        self.data["season"] = None
-        seasons = self.current_season_dates()
-        for year in self._years:
-            for season in seasons.keys():
-                season_start, \
-                    season_end = self.season_dates(season, str(year),
-                                                       seasons)
-                self.data[season_start : season_end]["season"] = season
-
     def get_climbing(self):
         """
+        Select the data when values are increasing compared to previous
+        time step
         """
         climbing = self.data[self.data_cols].diff() > 0.0
         df = self.data[climbing]
@@ -377,23 +426,53 @@ class HydroAnalysis():
 
     def get_recess(self):
         """
+        Select the data when values are decreasing compared to previous
+        time step
         """
         recess = self.data[self.data_cols].diff() < 0.0
         df = self.data[recess]
         df = df.asfreq(self.data.index.freq)
         return self.__class__(df, datacols=self.data_cols)
 
-#%%
-    def get_modes(self):
+    def _control_extra_serie(self):
+        """check if extra time serie fits with the current dataset
+        """
+
+
+    def get_modes_wagener(self, rain=None, lag_time=1):
         """
         Add column to data-sets providing information about:
 
             * driven
             * non-driven quick (above season-mean)
             * non-driven slow (below season-mean)
+
+        Parameters
+        ----------
+        rain : pd.DataFrame
+            time serie of the rainfall
+        lag_time : int
+            N times the frequency of the data series (default 1 time step)
+
+        Notes
+        -----
+        Different conepts can be used/tested for the lag time. As an
+        example, the catchment concentration time is the time needed
+        for water to flow from the most remote point in a watershed to
+        the watershed outlet.
+        For the calculation of catchment concentration time, the user is
+        referred to
+        http://www.tandfonline.com/doi/pdf/10.1080/02626667.2013.866712
         """
+        if rain: #driven is initiated by rain
+            True
+
+        else: #
+            True
+
         return True
 
+#%%
     def get_highpeak_discharges(self):
         """
         Add column to data-sets with the season information
