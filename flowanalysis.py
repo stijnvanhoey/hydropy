@@ -15,6 +15,7 @@ from pandas.tseries.offsets import DateOffset
 from reading_third_party_data import load_VMM_zrx_timeserie
 
 #ALSO INCLUDE: Georgakakos2004 !!! ROC
+#inspiuratie: http://cran.r-project.org/web/packages/hydroTSM/vignettes/hydroTSM_Vignette.pdf
 
 class HydroAnalysis():
     '''
@@ -93,7 +94,7 @@ class HydroAnalysis():
 
         # names of columns to use as data column for specific functions
         if datacols is not None:
-            #check fo existence
+            #check fo existence in dframe
             for colname in datacols:
                 if not colname in self.data.columns:
                     raise Exception(colname + " no current dataframe column name")
@@ -134,7 +135,15 @@ class HydroAnalysis():
         Provides also shortcut for date selection (pandas style):
         eg hydroobject["2009":"2011"] or
         """
-        return self.__class__(self.data[val], datacols=self.data_cols)
+        if isinstance(val, str) and val in self.data_cols:
+            return self.__class__(self.data[val], datacols=[val])
+        elif isinstance(val, list):
+            for name in val:
+                if not name in self.data_cols:
+                    raise Exception("this selection not supported")
+            return self.__class__(self.data[val], datacols=val)
+        else:
+            return self.__class__(self.data[val], datacols=self.data_cols)
 
     def _check_date_range(self, date2test):
         """controller for date range
