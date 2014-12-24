@@ -145,6 +145,11 @@ class HydroAnalysis():
         else:
             return self.__class__(self.data[val], datacols=self.data_cols)
 
+    def __setitem__(self, val):
+        """
+        """
+        print "not supported"
+
     def _check_date_range(self, date2test):
         """controller for date range
         """
