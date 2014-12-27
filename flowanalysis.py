@@ -236,6 +236,11 @@ class HydroAnalysis():
         """
         return self.data.tail(n)
 
+    def quantile(self, q, axis=0):
+        """pipe the pandas quantile function
+        """
+        return self.data.quantile(q, axis)
+
     def plot(self, *args, **kwargs):
         """quick pandas supported plot function
         """
@@ -392,6 +397,11 @@ class HydroAnalysis():
 
         return self.__getitem__(year)
 
+    def _pass_freq(self, df):
+        """help function to pass frequency to next item
+        """
+        return df.asfreq(self.data.index.freq)
+
     def get_month(self, month):
         """
         Select a subset of the timeserie by selecting all data of a specific
@@ -404,7 +414,7 @@ class HydroAnalysis():
         """
         month_id = self._existing_month(month)
         df = self.data.groupby(lambda x: x.month).get_group(month_id)
-        df = df.asfreq(self.data.index.freq)
+        df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
     def get_season(self, season):
@@ -425,7 +435,7 @@ class HydroAnalysis():
         season = season.capitalize()
         #return self.__class__(self.data[self.data["season"] == season])
         df = self.data[self.data["season"] == season]
-        df = df.asfreq(self.data.index.freq)
+        df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
     def get_climbing(self):
@@ -435,7 +445,7 @@ class HydroAnalysis():
         """
         climbing = self.data[self._data_cols].diff() > 0.0
         df = self.data[climbing]
-        df = df.asfreq(self.data.index.freq)
+        df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
     def get_recess(self):
@@ -445,14 +455,88 @@ class HydroAnalysis():
         """
         recess = self.data[self._data_cols].diff() < 0.0
         df = self.data[recess]
-        df = df.asfreq(self.data.index.freq)
+        df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
-    def _control_extra_serie(self):
-        """check if extra time serie fits with the current dataset
+#%%
+
+    def get_above_percentile(self, percentile):
         """
+        Add column to data-sets with the season information
+
+        Parameters
+        -----------
+        percentile : float [0-1]
+            percentile to use
+        """
+        percentilevalue = self.quantile(percentile)
+        df = self.data[self.data > percentilevalue]
+        df = self._pass_freq(df)
+        return self.__class__(df, datacols=self._data_cols)
+
+    def get_below_percentile(self, percentile):
+        """
+        Add column to data-sets with the season information
+
+        Parameters
+        -----------
+        percentile : float [0-1]
+            percentile to use
+        """
+        percentilevalue = self.quantile(percentile)
+        df = self.data[self.data < percentilevalue]
+        df = self._pass_freq(df)
+        return self.__class__(df, datacols=self._data_cols)
+
+#%%
+    def get_highpeak_discharges(self):
+        """
+        Add column to data-sets with the season information
+        """
+        #use the peaks_above_percentile function
+
+        return True
+
+    def get_lowpeak_discharges(self):
+        """
+        Add column to data-sets with the season information
+        """
+        #use the peaks_below_percentile function
+        return True
 
 
+    def get_above_b04(self):
+        """
+        Add column to data-sets with the season information
+        """
+        return True
+
+#%%
+
+    def get_above_b08(self):
+        """
+        Add column to data-sets with the season information
+        """
+        return True
+
+    def get_storms_per_year(self):
+        """
+        Add column to data-sets with the season information
+        """
+        #use selectstorms function
+        return True
+
+
+#%%
+    def get_above_baseflow(self, baseflowdata):
+        """
+        Add column to data-sets with the season information
+        """
+        # use the baseflowdata
+        return True
+
+
+#%%
     def get_modes_wagener(self, rain=None, lag_time=1):
         """
         Add column to data-sets providing information about:
@@ -486,59 +570,10 @@ class HydroAnalysis():
 
         return True
 
-#%%
-    def get_highpeak_discharges(self):
-        """
-        Add column to data-sets with the season information
-        """
-        #use the peaks_above_percentile function
 
-        return True
-
-    def get_lowpeak_discharges(self):
+    def _control_extra_serie(self):
+        """check if extra time serie fits with the current dataset
         """
-        Add column to data-sets with the season information
-        """
-        #use the peaks_below_percentile function
-        return True
-
-    def get_above_percentile(self):
-        """
-        Add column to data-sets with the season information
-        """
-        return True
-
-    def get_below_percentile(self):
-        """
-        Add column to data-sets with the season information
-        """
-        return True
-
-    def _mask_above_b04(self):
-        """
-        Add column to data-sets with the season information
-        """
-        return True
-
-    def _mask_above_b08(self):
-        """
-        Add column to data-sets with the season information
-        """
-        return True
-
-    def get_storms_per_year(self):
-        """
-        Add column to data-sets with the season information
-        """
-        #use selectstorms function
-        return True
-
-    def get_above_baseflow(self, baseflowdata):
-        """
-        Add column to data-sets with the season information
-        """
-        # use the baseflowdata
-        return True
 
 #    #The handling are static methods to make them useful on any pandas
 #    #timeserie of dataframe object
