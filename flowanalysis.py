@@ -363,6 +363,8 @@ class HydroAnalysis():
     def _mask_seasons(self):
         """
         Add column to data-sets with the season information
+
+        #TODO last season switch not tackled!!
         """
         self.data.loc[:, "season"] = None
         seasons = self.current_season_dates()
@@ -488,47 +490,57 @@ class HydroAnalysis():
         return self.__class__(df, datacols=self._data_cols)
 
 #%%
-    def get_highpeak_discharges(self, min_distance):
+    def get_highpeaks(self, min_distance):
         """
         Select peak discharges from the time serie
-
-        TODO: control 2d-option vs 1D vector
         """
         #use the peaks_above_percentile function
-        selected_peaks = argrelmax(self.data.values, order = min_distance,
-                                          mode = 'wrap')
-        high_peaks = self.data.iloc[selected_peaks[0]]
+        selected_peaks = argrelmax(self.data.values, order=min_distance,
+                                          mode='wrap', axis=0)
 
-        return high_peaks
+        # Get the rows with peaks (for any station)
+        peakrows = self.data.iloc[selected_peaks[0], :]
 
-    def get_lowpeak_discharges(self, min_distance):
+        # Get the columns values of the peaks
+        temp1 = np.zeros_like(peakrows.values)
+        for i, j in enumerate(selected_peaks[1]):
+            temp1[i,j] = 1.
+        print temp1, peakrows
+        high_peaks = temp1[:, :-1] * peakrows.iloc[:, :-1]
+        high_peaks[high_peaks==0] = np.nan
+
+        #high_peaks = self._pass_freq(peakrows) # TODO!
+        return self.__class__(high_peaks, datacols=self._data_cols)
+
+    def get_lowpeaks(self, min_distance):
         """
         Add column to data-sets with the season information
-
-        TODO: control 2d-option vs 1D vector
         """
         #use the peaks_below_percentile function
-        selected_peaks = argrelmin(self.data.values, order = min_distance,
-                                          mode = 'wrap')
+        selected_peaks = argrelmin(self.data.values, order=min_distance,
+                                          mode='wrap', axis=0)
         low_peaks = self.data.iloc[selected_peaks[0]]
-        return self.__class__(df, datacols=self._data_cols)
+        low_peaks = self._pass_freq(low_peaks)
+        return self.__class__(low_peaks, datacols=self._data_cols)
 
-
-    def get_above_b04(self):
-        """
-        Add column to data-sets with the season information
-        """
-        return True
 
 #%%
 
-    def get_above_b08(self):
+    def _get_above_b04(self):
         """
         Add column to data-sets with the season information
         """
         return True
 
-    def get_storms_per_year(self):
+
+
+    def _get_above_b08(self):
+        """
+        Add column to data-sets with the season information
+        """
+        return True
+
+    def _get_storms_per_year(self):
         """
         Add column to data-sets with the season information
         """
@@ -537,7 +549,7 @@ class HydroAnalysis():
 
 
 #%%
-    def get_above_baseflow(self, baseflowdata):
+    def _get_above_baseflow(self, baseflowdata):
         """
         Add column to data-sets with the season information
         """
@@ -546,7 +558,7 @@ class HydroAnalysis():
 
 
 #%%
-    def get_modes_wagener(self, rain=None, lag_time=1):
+    def _get_modes_wagener(self, rain=None, lag_time=1):
         """
         Add column to data-sets providing information about:
 
