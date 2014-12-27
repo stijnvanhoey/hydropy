@@ -98,9 +98,9 @@ class HydroAnalysis():
             for colname in datacols:
                 if not colname in self.data.columns:
                     raise Exception(colname + " no current dataframe column name")
-            self.data_cols = datacols
+            self._data_cols = datacols
         else:
-            self.data_cols = self.data.columns
+            self._data_cols = self.data.columns
 
         #Save start and enddate of the timeserie
         self._start_date = self.data.index[0]
@@ -120,7 +120,7 @@ class HydroAnalysis():
 
     def __repr__(self):
         message = 'Data columns '
-        for name in self.data_cols:
+        for name in self._data_cols:
             message += name + ', '
         message += '\n ranging from ' + \
                         self._start_date.strftime("%H:%M:%S %d/%m/%Y") + \
@@ -135,15 +135,15 @@ class HydroAnalysis():
         Provides also shortcut for date selection (pandas style):
         eg hydroobject["2009":"2011"] or
         """
-        if isinstance(val, str) and val in self.data_cols:
+        if isinstance(val, str) and val in self._data_cols:
             return self.__class__(self.data[val], datacols=[val])
         elif isinstance(val, list):
             for name in val:
-                if not name in self.data_cols:
+                if not name in self._data_cols:
                     raise Exception("this selection not supported")
             return self.__class__(self.data[val], datacols=val)
         else:
-            return self.__class__(self.data[val], datacols=self.data_cols)
+            return self.__class__(self.data[val], datacols=self._data_cols)
 
     def __setitem__(self, val):
         """
@@ -203,7 +203,7 @@ class HydroAnalysis():
         http://pandas.pydata.org/pandas-docs/dev/timeseries.html#legacy-aliases
         """
         return self.__class__(self.data.asfreq(freq, *args, **kwargs),
-                              datacols=self.data_cols)
+                              datacols=self._data_cols)
 
     def frequency_resample(self, *args, **kwargs):
         """
@@ -214,7 +214,7 @@ class HydroAnalysis():
         >>>  temp.frequency_resample('D', "mean") # Daily means
         """
         return self.__class__(self.data.resample(*args, **kwargs),
-                              datacols=self.data_cols)
+                              datacols=self._data_cols)
 
     def summary(self):
         """returns summary/description of the data
@@ -358,14 +358,14 @@ class HydroAnalysis():
         """
         Add column to data-sets with the season information
         """
-        self.data["season"] = None
+        self.data.loc[:, "season"] = None
         seasons = self.current_season_dates()
         for year in self._years:
             for season in seasons.keys():
                 season_start, \
                     season_end = self.season_dates(season, str(year),
                                                        seasons)
-                self.data[season_start : season_end]["season"] = season
+                self.data.loc[season_start : season_end, "season"] = season
 
     def get_date_range(self, start, end):
         """
@@ -373,8 +373,8 @@ class HydroAnalysis():
         """
         self._check_date_range(start)
         self._check_date_range(end)
-        return self.__class__(self.data[start : end],
-                              datacols=self.data_cols)
+        return self.__class__(self.data.loc[start : end, :],
+                              datacols=self._data_cols)
 
     def get_year(self, year):
         """
@@ -405,7 +405,7 @@ class HydroAnalysis():
         month_id = self._existing_month(month)
         df = self.data.groupby(lambda x: x.month).get_group(month_id)
         df = df.asfreq(self.data.index.freq)
-        return self.__class__(df, datacols=self.data_cols)
+        return self.__class__(df, datacols=self._data_cols)
 
     def get_season(self, season):
         """
@@ -426,27 +426,27 @@ class HydroAnalysis():
         #return self.__class__(self.data[self.data["season"] == season])
         df = self.data[self.data["season"] == season]
         df = df.asfreq(self.data.index.freq)
-        return self.__class__(df, datacols=self.data_cols)
+        return self.__class__(df, datacols=self._data_cols)
 
     def get_climbing(self):
         """
         Select the data when values are increasing compared to previous
         time step
         """
-        climbing = self.data[self.data_cols].diff() > 0.0
+        climbing = self.data[self._data_cols].diff() > 0.0
         df = self.data[climbing]
         df = df.asfreq(self.data.index.freq)
-        return self.__class__(df, datacols=self.data_cols)
+        return self.__class__(df, datacols=self._data_cols)
 
     def get_recess(self):
         """
         Select the data when values are decreasing compared to previous
         time step
         """
-        recess = self.data[self.data_cols].diff() < 0.0
+        recess = self.data[self._data_cols].diff() < 0.0
         df = self.data[recess]
         df = df.asfreq(self.data.index.freq)
-        return self.__class__(df, datacols=self.data_cols)
+        return self.__class__(df, datacols=self._data_cols)
 
     def _control_extra_serie(self):
         """check if extra time serie fits with the current dataset
