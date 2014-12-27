@@ -9,6 +9,7 @@ import datetime
 import calendar
 
 import numpy as np
+from scipy.signal import argrelmax, argrelmin
 import pandas as pd
 from pandas.tseries.offsets import DateOffset
 
@@ -458,11 +459,9 @@ class HydroAnalysis():
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
-#%%
-
     def get_above_percentile(self, percentile):
         """
-        Add column to data-sets with the season information
+        Select the data with values above the given percentile
 
         Parameters
         -----------
@@ -476,7 +475,7 @@ class HydroAnalysis():
 
     def get_below_percentile(self, percentile):
         """
-        Add column to data-sets with the season information
+        Select the data with values below the given percentile
 
         Parameters
         -----------
@@ -489,20 +488,30 @@ class HydroAnalysis():
         return self.__class__(df, datacols=self._data_cols)
 
 #%%
-    def get_highpeak_discharges(self):
+    def get_highpeak_discharges(self, min_distance):
         """
-        Add column to data-sets with the season information
+        Select peak discharges from the time serie
+
+        TODO: control 2d-option vs 1D vector
         """
         #use the peaks_above_percentile function
+        selected_peaks = argrelmax(self.data.values, order = min_distance,
+                                          mode = 'wrap')
+        high_peaks = self.data.iloc[selected_peaks[0]]
 
-        return True
+        return high_peaks
 
-    def get_lowpeak_discharges(self):
+    def get_lowpeak_discharges(self, min_distance):
         """
         Add column to data-sets with the season information
+
+        TODO: control 2d-option vs 1D vector
         """
         #use the peaks_below_percentile function
-        return True
+        selected_peaks = argrelmin(self.data.values, order = min_distance,
+                                          mode = 'wrap')
+        low_peaks = self.data.iloc[selected_peaks[0]]
+        return self.__class__(df, datacols=self._data_cols)
 
 
     def get_above_b04(self):
