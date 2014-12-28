@@ -16,7 +16,7 @@ from pandas.tseries.offsets import DateOffset
 from reading_third_party_data import load_VMM_zrx_timeserie
 
 #ALSO INCLUDE: Georgakakos2004 !!! ROC
-#inspiuratie: http://cran.r-project.org/web/packages/hydroTSM/vignettes/hydroTSM_Vignette.pdf
+#inspiratie: http://cran.r-project.org/web/packages/hydroTSM/vignettes/hydroTSM_Vignette.pdf
 
 class HydroAnalysis():
     '''
@@ -91,7 +91,7 @@ class HydroAnalysis():
                         self.data.index.freq
             else:
                 print("Not able to interpret the time serie frequency,\
-                      run the set_frequency to define the frequency!")
+                      run the frequency_change to define the frequency!")
 
         # names of columns to use as data column for specific functions
         if datacols is not None:
@@ -205,6 +205,11 @@ class HydroAnalysis():
         """
         return self.__class__(self.data.asfreq(freq, *args, **kwargs),
                               datacols=self._data_cols)
+
+    def _pass_freq(self, df):
+        """help function to pass frequency to next item
+        """
+        return df.asfreq(self.data.index.freq)
 
     def frequency_resample(self, *args, **kwargs):
         """
@@ -400,11 +405,6 @@ class HydroAnalysis():
 
         return self.__getitem__(year)
 
-    def _pass_freq(self, df):
-        """help function to pass frequency to next item
-        """
-        return df.asfreq(self.data.index.freq)
-
     def get_month(self, month):
         """
         Select a subset of the timeserie by selecting all data of a specific
@@ -490,37 +490,98 @@ class HydroAnalysis():
         return self.__class__(df, datacols=self._data_cols)
 
 #%%
-    def get_highpeaks(self, min_distance):
+    @staticmethod
+    def _getridof_double_peaks(data):
         """
-        Select peak discharges from the time serie
+        Small hack function to eliminate double peak values from a timeserie
+
+        Parameters
+        -----------
+        data : pd.DataFrame
+
         """
+        diff = data.diff()
+        data[diff == 0.0] = data[diff == 0.0] - 0.001
+        return data
+
+    def get_highpeaks(self, min_distance, above_percentile=0.):
+        """
+        Select peak discharges from the time serie, uysing the
+        scipy.argrelmax algorithm.
+        This can be above a certain percentile value defined with
+        above_percentile.
+
+        Parameters
+        -----------
+        min_distance : int
+            distance to use for comparison of a peak
+        above_percentile : float [0-1]
+            only peaks above the given percentile will be selected
+
+        #TODO: clean output choice=> not in freq, just short list
+        """
+        percentilevalue = self.quantile(above_percentile)
+
         #use the peaks_above_percentile function
-        selected_peaks = argrelmax(self.data.values, order=min_distance,
+        peakcleaned = self._getridof_double_peaks(self.data[self._data_cols])
+        selected_peaks = argrelmax(peakcleaned.values, order=min_distance,
                                           mode='wrap', axis=0)
 
         # Get the rows with peaks (for any station)
-        peakrows = self.data.iloc[selected_peaks[0], :]
+        # select unique rows to keep indices at dframe level later on
+        rows, rev_ind = np.unique(selected_peaks[0], return_inverse=True)
+        #peakrows = peakcleaned.iloc[rows, :]
+        peakrows = self.data.ix[rows, self._data_cols] #original data use
 
-        # Get the columns values of the peaks
+        # building dummy matrix for element selection of dframe
         temp1 = np.zeros_like(peakrows.values)
-        for i, j in enumerate(selected_peaks[1]):
-            temp1[i,j] = 1.
-        print temp1, peakrows
-        high_peaks = temp1[:, :-1] * peakrows.iloc[:, :-1]
+        for i, j in zip(rev_ind, selected_peaks[1]):
+                temp1[i, j] = 1.
+        high_peaks = temp1 * peakrows
         high_peaks[high_peaks==0] = np.nan
 
-        #high_peaks = self._pass_freq(peakrows) # TODO!
+        #Only keep the ones above percentile value
+        high_peaks = high_peaks[high_peaks > percentilevalue]
+
+        high_peaks = high_peaks.reindex(index=self.data.index)
         return self.__class__(high_peaks, datacols=self._data_cols)
 
-    def get_lowpeaks(self, min_distance):
+    def get_lowpeaks(self, min_distance, below_percentile=1.):
         """
-        Add column to data-sets with the season information
+        Select peak discharges from the time serie, uysing the
+        scipy.argrelmin algorithm
+
+        NOT WORKING YET!
+
+        Parameters
+        -----------
+        min_distance : int
+            distance to use for comparison of a peak
         """
-        #use the peaks_below_percentile function
-        selected_peaks = argrelmin(self.data.values, order=min_distance,
+        percentilevalue = self.quantile(below_percentile)
+
+        #use the peaks_above_percentile function
+        peakcleaned = self._getridof_double_peaks(self.data[self._data_cols])
+        selected_peaks = argrelmin(peakcleaned.values, order=min_distance,
                                           mode='wrap', axis=0)
-        low_peaks = self.data.iloc[selected_peaks[0]]
-        low_peaks = self._pass_freq(low_peaks)
+
+        # Get the rows with peaks (for any station)
+        # select unique rows to keep indices at dframe level later on
+        rows, rev_ind = np.unique(selected_peaks[0], return_inverse=True)
+        #peakrows = peakcleaned.iloc[rows, :]
+        peakrows = self.data.ix[rows, self._data_cols] #original data use
+
+        # building dummy matrix for element selection of dframe
+        temp1 = np.zeros_like(peakrows.values)
+        for i, j in zip(rev_ind, selected_peaks[1]):
+                temp1[i, j] = 1.
+        low_peaks = temp1 * peakrows
+        low_peaks[low_peaks==0] = np.nan
+
+        #Only keep the ones above percentile value
+        low_peaks = low_peaks[low_peaks < percentilevalue]
+
+        low_peaks = low_peaks.reindex(index=self.data.index)
         return self.__class__(low_peaks, datacols=self._data_cols)
 
 
@@ -531,8 +592,6 @@ class HydroAnalysis():
         Add column to data-sets with the season information
         """
         return True
-
-
 
     def _get_above_b08(self):
         """
