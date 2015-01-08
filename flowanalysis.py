@@ -137,14 +137,14 @@ class HydroAnalysis():
         eg hydroobject["2009":"2011"] or
         """
         if isinstance(val, str) and val in self._data_cols:
-            return self.__class__(self.data[val], datacols=[val])
+            return self.__class__(self.data[val].copy(), datacols=[val])
         elif isinstance(val, list):
             for name in val:
                 if not name in self._data_cols:
                     raise Exception("this selection not supported")
-            return self.__class__(self.data[val], datacols=val)
+            return self.__class__(self.data[val].copy(), datacols=val)
         else:
-            return self.__class__(self.data[val], datacols=self._data_cols)
+            return self.__class__(self.data[val].copy(), datacols=self._data_cols)
 
     def __setitem__(self, val):
         """
@@ -386,7 +386,7 @@ class HydroAnalysis():
         """
         self._check_date_range(start)
         self._check_date_range(end)
-        return self.__class__(self.data.loc[start : end, :],
+        return self.__class__(self.data.loc[start : end, :].copy(),
                               datacols=self._data_cols)
 
     def get_year(self, year):
@@ -437,7 +437,7 @@ class HydroAnalysis():
         """
         season = season.capitalize()
         #return self.__class__(self.data[self.data["season"] == season])
-        df = self.data[self.data["season"] == season]
+        df = self.data[self.data["season"] == season].copy()
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
@@ -447,7 +447,7 @@ class HydroAnalysis():
         time step
         """
         climbing = self.data[self._data_cols].diff() > 0.0
-        df = self.data[climbing]
+        df = self.data[climbing].copy()
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
@@ -457,7 +457,7 @@ class HydroAnalysis():
         time step
         """
         recess = self.data[self._data_cols].diff() < 0.0
-        df = self.data[recess]
+        df = self.data[recess].copy()
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
@@ -471,7 +471,7 @@ class HydroAnalysis():
             percentile to use
         """
         percentilevalue = self.quantile(percentile)
-        df = self.data[self.data > percentilevalue]
+        df = self.data[self.data > percentilevalue].copy()
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
@@ -485,7 +485,7 @@ class HydroAnalysis():
             percentile to use
         """
         percentilevalue = self.quantile(percentile)
-        df = self.data[self.data < percentilevalue]
+        df = self.data[self.data < percentilevalue].copy()
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
@@ -498,10 +498,13 @@ class HydroAnalysis():
         Parameters
         -----------
         data : pd.DataFrame
-
         """
         diff = data.diff()
-        data[diff == 0.0] = data[diff == 0.0] - 0.001
+        print diff
+        data.iloc[(diff == 0.)] = data.iloc[(diff == 0.)] - 0.001
+        #data[diff == 0.] = data[diff == 0.] - 0.001
+        # tt = temp.data[temp._data_cols].where(diff!=0.0, temp.data[temp._data_cols] + 0.001)
+
         return data
 
     def get_highpeaks(self, min_distance, above_percentile=0.):
@@ -519,6 +522,7 @@ class HydroAnalysis():
             only peaks above the given percentile will be selected
 
         #TODO: clean output choice=> not in freq, just short list
+        # This is still 1D!
         """
         percentilevalue = self.quantile(above_percentile)
 
@@ -531,7 +535,7 @@ class HydroAnalysis():
         # select unique rows to keep indices at dframe level later on
         rows, rev_ind = np.unique(selected_peaks[0], return_inverse=True)
         #peakrows = peakcleaned.iloc[rows, :]
-        peakrows = self.data.ix[rows, self._data_cols] #original data use
+        peakrows = self.data.ix[rows, self._data_cols].copy() #original data use
 
         # building dummy matrix for element selection of dframe
         temp1 = np.zeros_like(peakrows.values)
@@ -569,7 +573,7 @@ class HydroAnalysis():
         # select unique rows to keep indices at dframe level later on
         rows, rev_ind = np.unique(selected_peaks[0], return_inverse=True)
         #peakrows = peakcleaned.iloc[rows, :]
-        peakrows = self.data.ix[rows, self._data_cols] #original data use
+        peakrows = self.data.ix[rows, self._data_cols].copy() #original data use
 
         # building dummy matrix for element selection of dframe
         temp1 = np.zeros_like(peakrows.values)
