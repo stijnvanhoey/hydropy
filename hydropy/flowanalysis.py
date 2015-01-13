@@ -665,13 +665,3 @@ class HydroAnalysis():
 #    def summarize_it(df):
 #        return df.describe()
 #
-
-
-
-
-
-
-
-
-
-

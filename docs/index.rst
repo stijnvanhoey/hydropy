@@ -6,6 +6,9 @@
 Welcome to HydroPy's documentation!
 ===================================
 
+.. autoclass:: hydropy.HydroAnalysis
+   :members:
+
 Contents:
 
 .. toctree::
@@ -19,4 +22,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

@@ -9,9 +9,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from baseflow import *
-from flowanalysis import HydroAnalysis
-
 flowdata = pd.read_pickle("FlowData")
 raindata = pd.read_pickle("RainData")
 flow2use = flowdata["L06_347"]
@@ -57,8 +54,3 @@ class TestGetFunctions():
 
         ms3 = temp.get_month("Jun").get_recess().data # abbr
         assert_frame_equal(ms1, ms3)
-
-
-
-
-
