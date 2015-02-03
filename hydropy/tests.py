@@ -17,14 +17,14 @@ raindata = pd.read_pickle("../data/RainData")
 flow2use = flowdata["L06_347"]
 
 temp = HydroAnalysis(flowdata)#, datacols=['LS06_342'])
-tempshort = temp.get_year("2011")
+tempshort = temp.get_year("2010")
 
 
 #TODO!!!!! make return self ipv die return eigen obect voor geheugenstuff!
 #TODO: ignore NAN
 
 
-test = tempshort.get_highpeaks(350)
+test = tempshort.get_highpeaks(150)
 
 #test = tempshort.get_lowpeaks(50, below_percentile=1.)
 fig, ax = plt.subplots()

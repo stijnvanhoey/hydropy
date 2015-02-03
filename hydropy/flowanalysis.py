@@ -518,6 +518,7 @@ class HydroAnalysis():
 
         #TODO: clean output choice=> not in freq, just short list
         # This is still 1D!
+        # or maybe use find_peaks_cwt
         """
         percentilevalue = self.quantile(above_percentile)
 
