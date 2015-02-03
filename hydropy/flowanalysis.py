@@ -23,9 +23,6 @@ class HydroAnalysis():
     The idea:
     handle the flow timeserie; definitions for splitting etc...
 
-    first todo is some more thinking about how to set things up
-    including ideas from hydromad, tiger,... and handling it flexible
-
     Attributes
     -----------
     data : pd.DataFrame
@@ -500,16 +497,14 @@ class HydroAnalysis():
         data : pd.DataFrame
         """
         diff = data.diff()
-        print diff
-        data.iloc[(diff == 0.)] = data.iloc[(diff == 0.)] - 0.001
+        data[diff == 0.] = data[diff == 0.] - 0.001
         #data[diff == 0.] = data[diff == 0.] - 0.001
         # tt = temp.data[temp._data_cols].where(diff!=0.0, temp.data[temp._data_cols] + 0.001)
-
         return data
 
     def get_highpeaks(self, min_distance, above_percentile=0.):
         """
-        Select peak discharges from the time serie, uysing the
+        Select peak discharges from the time serie, using the
         scipy.argrelmax algorithm.
         This can be above a certain percentile value defined with
         above_percentile.
@@ -527,7 +522,7 @@ class HydroAnalysis():
         percentilevalue = self.quantile(above_percentile)
 
         #use the peaks_above_percentile function
-        peakcleaned = self._getridof_double_peaks(self.data[self._data_cols])
+        peakcleaned = self._getridof_double_peaks(self.data[self._data_cols].copy())
         selected_peaks = argrelmax(peakcleaned.values, order=min_distance,
                                           mode='wrap', axis=0)
 

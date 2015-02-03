@@ -9,8 +9,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-flowdata = pd.read_pickle("FlowData")
-raindata = pd.read_pickle("RainData")
+from hydropy import HydroAnalysis
+
+
+flowdata = pd.read_pickle("../data/FlowData")
+raindata = pd.read_pickle("../data/RainData")
 flow2use = flowdata["L06_347"]
 
 temp = HydroAnalysis(flowdata)#, datacols=['LS06_342'])
@@ -21,9 +24,8 @@ tempshort = temp.get_year("2011")
 #TODO: ignore NAN
 
 
-#test = tempshort.get_highpeaks(350)
+test = tempshort.get_highpeaks(350)
 
-test = tempshort.get_highpeaks(50, above_percentile=0.9)
 #test = tempshort.get_lowpeaks(50, below_percentile=1.)
 fig, ax = plt.subplots()
 test["LS06_34C"].plot(ax=ax, style = 'o')
