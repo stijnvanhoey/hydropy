@@ -16,7 +16,7 @@ A more extended tutorial/introduction is provided in a ipython notebook. See the
 To install this, git clone the repo and then install it by:
 
     python setup.py install
-    
+
 Inspiration or possible useful extensions:
 * Basically this is a restart of hydropy https://code.google.com/p/hydropy/
 * Hydroclimpy http://hydroclimpy.sourceforge.net/
@@ -24,7 +24,8 @@ Inspiration or possible useful extensions:
 * http://cran.r-project.org/web/packages/hydroTSM/vignettes/hydroTSM_Vignette.pdf
 
 The slides version of the notebook was made with nbconvert (using reveal.js), by following command:
-ipython nbconvert hydropy_tutorial.ipynb --to=slides --post=serve --reveal-prefix=reveal.js --config slides_config.py
+
+    ipython nbconvert hydropy_tutorial.ipynb --to=slides --post=serve --reveal-prefix=reveal.js --config slides_config.py
 
 
-Copyright (c) 2015, Stijn Van Hoey 
+Copyright (c) 2015, Stijn Van Hoey
