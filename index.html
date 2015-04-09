@@ -33,7 +33,7 @@
         <h1>
 <a id="hydropy" class="anchor" href="#hydropy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hydropy</h1>
 
-<p>Analysis of hydrological oriented time series. Basically, the package adds domain-specific functionalities to Pandas DataFrames, while keeping the power of it.</p>
+<p>Work with hydrological oriented time series. Basically, the package adds domain-specific functionalities to Pandas DataFrames, while keeping the power of it.</p>
 
 <p>Examples are:</p>
 
@@ -41,19 +41,19 @@
 myflowserie.get_year('2011').get_month("Jun").get_recess()
 </code></pre>
 
-<p><img src="./data/recession.png" alt="Recession periods"></p>
+<p><img src="./images/recession.png" alt="Recession periods"></p>
 
 <pre><code># Peak values above 90th percentile for station LS06_347 in july 2010:
 myflowserie['LS06_347'].get_year('2010').get_month("Jul").get_highpeaks(150, above_percentile=0.9)
 </code></pre>
 
-<p><img src="./data/peaks.png" alt="Selected peaks"></p>
+<p><img src="./images/peaks.png" alt="Selected peaks"></p>
 
 <pre><code># Select 3 storms out of the series
 storms = myflowserie.derive_storms(raindata['P06_014'], 'LS06_347', number_of_storms=3, drywindow=96, makeplot=True)
 </code></pre>
 
-<p><img src="./data/storms.png" alt="Selected storms"></p>
+<p><img src="./images/storms.png" alt="Selected storms"></p>
 
 <p>A more extended tutorial/introduction is provided in a ipython notebook. See the output at <a href="http://nbviewer.ipython.org/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb">http://nbviewer.ipython.org/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb</a></p>
 
