@@ -7,9 +7,18 @@ Examples are:
 
     # Recession periods in June 2011:
     myflowserie.get_year('2011').get_month("Jun").get_recess()
-    
+
+![Recession periods](./data/recession.png)
+
     # Peak values above 90th percentile for station LS06_347 in july 2010:
     myflowserie['LS06_347'].get_year('2010').get_month("Jul").get_highpeaks(150, above_percentile=0.9)
+
+![Selected peaks](./data/peaks.png)
+
+    # Select 3 storms out of the series
+    storms = myflowserie.derive_storms(raindata['P06_014'], 'LS06_347', number_of_storms=3, drywindow=96, makeplot=True)
+
+![Selected storms](./data/storms.png)
 
 A more extended tutorial/introduction is provided in a ipython notebook. See the output at http://nbviewer.ipython.org/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
 
