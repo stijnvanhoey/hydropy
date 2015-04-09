@@ -15,11 +15,6 @@ from pandas.tseries.offsets import DateOffset
 
 from reading_third_party_data import load_VMM_zrx_timeserie
 
-#ALSO INCLUDE: Georgakakos2004 !!! ROC
-#inspiratie: http://cran.r-project.org/web/packages/hydroTSM/vignettes/hydroTSM_Vignette.pdf
-#Make sure the created is copy and not view, currently, the dataframe itself is also adapted with extra column!
-# Add dropna-option
-
 class HydroAnalysis():
     '''
     The idea:
@@ -607,7 +602,7 @@ class HydroAnalysis():
 
 #%%
     def _get_modes_wagener(self, rain=None, lag_time=1):
-        """
+        """ TODO
         Add column to data-sets providing information about:
 
             * driven
