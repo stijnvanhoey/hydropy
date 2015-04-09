@@ -86,8 +86,8 @@ class HydroAnalysis():
                                                    freq=guessed_freq)
                 self._frequency = guessed_freq
                 #self.data = self.data.asfreq(guessed_freq) #needed?!?
-                print "Frequency of the Time Serie is guessed as", \
-                        self.data.index.freq
+                #print "Frequency of the Time Serie is guessed as", \
+                #        self.data.index.freq
             else:
                 print("Not able to interpret the time serie frequency,\
                       run the frequency_change to define the frequency!")
@@ -356,13 +356,10 @@ class HydroAnalysis():
         #    print season + ": ", season_startdate, " till ", season_enddate
         return season_startdate, season_enddate
 
-    @staticmethod
-    def _exclude_nan(obs, mod):
-        """pd.DataFrame, pd.DataFrame -> pd.DataFrame
+    def get_data_only(self, dropna=True):
+        """Return the dataframe itself, with or without na-values
         """
-        obsmod =  pd.concat([obs, mod], axis = 1)
-        obsmod.columns = ["obs","mod"]
-        return obsmod.dropna()
+        return self.data.copy().dropna()
 
     def _mask_seasons(self):
         """
@@ -580,7 +577,7 @@ class HydroAnalysis():
         low_peaks = temp1 * peakrows
         low_peaks[low_peaks==0] = np.nan
 
-        #Only keep the ones above percentile value
+        #Only keep the ones below percentile value
         low_peaks = low_peaks[low_peaks < percentilevalue]
 
         low_peaks = low_peaks.reindex(index=self.data.index)
@@ -588,19 +585,6 @@ class HydroAnalysis():
 
 
 #%%
-
-    def _get_above_b04(self):
-        """
-        Add column to data-sets with the season information
-        """
-        return True
-
-    def _get_above_b08(self):
-        """
-        Add column to data-sets with the season information
-        """
-        return True
-
     def _get_storms_per_year(self):
         """
         Add column to data-sets with the season information
@@ -608,15 +592,18 @@ class HydroAnalysis():
         #use selectstorms function
         return True
 
-
 #%%
+    def _control_extra_serie(self):
+        """check if extra time serie fits with the current dataset
+        """
+        return False
+
     def _get_above_baseflow(self, baseflowdata):
         """
         Add column to data-sets with the season information
         """
         # use the baseflowdata
         return True
-
 
 #%%
     def _get_modes_wagener(self, rain=None, lag_time=1):
@@ -653,13 +640,5 @@ class HydroAnalysis():
         return True
 
 
-    def _control_extra_serie(self):
-        """check if extra time serie fits with the current dataset
-        """
 
-#    #The handling are static methods to make them useful on any pandas
-#    #timeserie of dataframe object
-#    @staticmethod  #useful when it doesn't use the itself!!
-#    def summarize_it(df):
-#        return df.describe()
-#
+

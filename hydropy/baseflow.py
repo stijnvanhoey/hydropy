@@ -5,18 +5,6 @@ Created on Mon Nov 10 12:02:28 2014
 @author: stvhoey
 """
 
-def get_baseflow_willems(flowserie, recession_time, average_fraction):
-    """
-
-    1. make the plot
-    2. get the recession periods from this plot
-    3. fit lines to all of them
-    4 get an 'average' value of these slopes
-    """
-    baseflow = 0.1* flowserie
-    return baseflow
-
-
 def get_baseflow_chapman(flowserie, recession_time):
     """
 

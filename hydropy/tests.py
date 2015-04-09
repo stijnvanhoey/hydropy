@@ -7,44 +7,48 @@ Created on Mon Nov 10 12:04:27 2014
 
 import numpy as np
 import pandas as pd
+import seaborn as sns
+sns.set_style('whitegrid')
 import matplotlib.pyplot as plt
 
 from hydropy import HydroAnalysis
-
 
 flowdata = pd.read_pickle("../data/FlowData")
 raindata = pd.read_pickle("../data/RainData")
 flow2use = flowdata["L06_347"]
 
-temp = HydroAnalysis(flowdata)#, datacols=['LS06_342'])
-tempshort = temp.get_year("2010")
+myflowserie = HydroAnalysis(flowdata)#, datacols=['LS06_342'])
+myflowserie_short = myflowserie['LS06_347'].get_year("2010")
+
+#%%
+
+# Select the summer of 2009:
+myflowserie.get_year('2009').get_season("Summer").plot(figsize=(12,6))
+
+#%% Select all June data
+flow_june = myflowserie.get_month("Jun")
+flow_june_df = flow_june.get_data_only()
+
+#%%  recession in June 2010
+myflowserie.get_year('2011').get_month("Jun").get_recess().plot(figsize=(12,6))
+
+#%%
+fig, ax = plt.subplots(figsize=(13, 6))
+myflowserie['LS06_347'].get_year('2010').get_month("Jul").get_highpeaks(150, above_percentile=0.9).plot(style='o', ax=ax)
+myflowserie['LS06_347'].get_year('2010').get_month("Jul").plot(ax=ax)
+
+#%%
+fig, ax = plt.subplots(figsize=(13, 6))
+myflowserie['LS06_347'].get_year('2010').get_month("Jul").get_lowpeaks(50, below_percentile=1.).plot(style='o', ax=ax)
+myflowserie['LS06_347'].get_year('2010').get_month("Jul").plot(ax=ax)
+
+#%%
 
 
-#TODO!!!!! make return self ipv die return eigen obect voor geheugenstuff!
-#TODO: ignore NAN
-
-
-test = tempshort.get_highpeaks(150)
-
-#test = tempshort.get_lowpeaks(50, below_percentile=1.)
-fig, ax = plt.subplots()
-test["LS06_34C"].plot(ax=ax, style = 'o')
-tempshort["LS06_34C"].plot(ax=ax)
-
-#example of concatenated selection of the time series:
-#subset1 = temp.get_season("summer").get_year("2010").get_recess()
-
-#! test for both single column as multicolumn ok
-#tt = temp["L06_347"].get_year("2010").get_month("Jun")
-
-
-fig, ax = plt.subplots()
-flow2use.plot(ax=ax)
 
 
 
-
-# READY MADE FOR UNIT TEST PURPOSES
+#%% READY MADE FOR UNIT TEST PURPOSES
 from pandas.util.testing import assert_frame_equal
 
 class TestGetFunctions():
