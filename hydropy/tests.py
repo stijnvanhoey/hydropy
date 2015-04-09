@@ -22,7 +22,6 @@ myflowserie = HydroAnalysis(flowdata)#, datacols=['LS06_342'])
 myflowserie_short = myflowserie['LS06_347'].get_year("2010")
 
 #%%
-
 # Select the summer of 2009:
 myflowserie.get_year('2009').get_season("Summer").plot(figsize=(12,6))
 
