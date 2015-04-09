@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov 27 18:14:28 2013
+Hydropy package
 
-@author: VHOEYS
+@author: Stijn Van Hoey
 """
 
 import datetime
@@ -13,6 +13,7 @@ from scipy.signal import argrelmax, argrelmin
 import pandas as pd
 from pandas.tseries.offsets import DateOffset
 
+from storm import selectstorms, plotstorms
 from reading_third_party_data import load_VMM_zrx_timeserie
 
 class HydroAnalysis():
@@ -580,12 +581,19 @@ class HydroAnalysis():
 
 
 #%%
-    def _get_storms_per_year(self):
+    def derive_storms(self, rainserie, column, number_of_storms=3,
+                      drywindow=96, makeplot=True):
         """
-        Add column to data-sets with the season information
+        Select a number of storms out of the timeserie
         """
-        #use selectstorms function
-        return True
+        storms = selectstorms(self.data[column], rainserie,
+                            number_of_storms=number_of_storms,
+                            drywindow=drywindow)
+        if makeplot:
+            fig, axes = plotstorms(self.data[column], rainserie, storms,
+                                   make_comparable=True,
+                                   period_title=True)
+        return storms
 
 #%%
     def _control_extra_serie(self):

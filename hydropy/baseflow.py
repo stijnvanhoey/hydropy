@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 10 12:02:28 2014
+Hydropy package
 
-@author: stvhoey
+@author: Stijn Van Hoey
 """
 
 def get_baseflow_chapman(flowserie, recession_time):

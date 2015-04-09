@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 10 12:04:27 2014
+Hydropy package
 
-@author: stvhoey
+@author: Stijn Van Hoey
 """
 
 import numpy as np
@@ -12,6 +12,7 @@ sns.set_style('whitegrid')
 import matplotlib.pyplot as plt
 
 from hydropy import HydroAnalysis
+from storm import selectstorms, plotstorms
 
 flowdata = pd.read_pickle("../data/FlowData")
 raindata = pd.read_pickle("../data/RainData")
@@ -42,11 +43,19 @@ fig, ax = plt.subplots(figsize=(13, 6))
 myflowserie['LS06_347'].get_year('2010').get_month("Jul").get_lowpeaks(50, below_percentile=1.).plot(style='o', ax=ax)
 myflowserie['LS06_347'].get_year('2010').get_month("Jul").plot(ax=ax)
 
-#%%
+#%% STORMS
 
+#function can be used on pd.Series
+stormfun = selectstorms(flowdata['LS06_347'], raindata['P05_039'],
+                        number_of_storms = 3, drywindow = 96)
+plotstorms(flowdata['LS06_347'], raindata['P05_039'], stormfun,
+               make_comparable = False,
+               period_title = True)
 
-
-
+#%%implemented in the HydroAnalysis:
+storms = myflowserie.derive_storms(raindata['P06_014'], 'LS06_347',
+                                   number_of_storms=3, drywindow=96,
+                                   makeplot=True)
 
 #%% READY MADE FOR UNIT TEST PURPOSES
 from pandas.util.testing import assert_frame_equal
