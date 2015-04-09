@@ -355,7 +355,7 @@ class HydroAnalysis():
     def get_data_only(self, dropna=True):
         """Return the dataframe itself, with or without na-values
         """
-        return self.data.copy().dropna()
+        return self.data[self._data_cols].copy().dropna()
 
     def _mask_seasons(self):
         """
