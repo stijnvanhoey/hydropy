@@ -38,6 +38,9 @@ tempshort["LS06_34C"].plot(ax=ax)
 #tt = temp["L06_347"].get_year("2010").get_month("Jun")
 
 
+fig, ax = plt.subplots()
+flow2use.plot(ax=ax)
+
 
 
 

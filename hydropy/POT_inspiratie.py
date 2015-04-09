@@ -32,38 +32,38 @@ def getDriven(FlowIn,RainIn,laghours=24):
     '''
     driven by rain
     '''
-    driven=ma.masked_where(RainIn < 0.001 ,FlowIn)  
+    driven=ma.masked_where(RainIn < 0.001 ,FlowIn)
     #TODO: LAGHOURS MOMENTEN TOEVOEGEN
 #    print 'lag-hours not yet implemented'
     return driven,np.array(driven.mask.copy())
 
 def getnonDrivenQuick(FlowIn,rain1,FMean,laghours=24):
     '''
-    Driven by rainfall , based on slope + higher than mean 
-    
+    Driven by rainfall , based on slope + higher than mean
+
     ! NEED WINTER/SUMMER BASED, otherwise stupid results: FMEAN
     need timeserie object
     '''
-   
-    nondriven=ma.masked_where(rain1 > 0.001 ,FlowIn)     
+
+    nondriven=ma.masked_where(rain1 > 0.001 ,FlowIn)
     #all values higher than mean value of season
     FlowAbove=ma.masked_where(nondriven-FMean < 0.0,nondriven)
     FlowAbove.unshare_mask()
     return getRecess(FlowAbove)
-    
-    
+
+
 def getnonDrivenSlow(FlowIn,rain1,FMean,laghours=24):
     '''
-    Driven by rainfall , based on slope + higher than mean 
-    
+    Driven by rainfall , based on slope + higher than mean
+
     ! NEED WINTER/SUMMER BASED, otherwise stupid results
-    
+
     need timeserie object
     '''
-    nondriven=ma.masked_where(rain1 > 0.001 ,FlowIn) 
-    
+    nondriven=ma.masked_where(rain1 > 0.001 ,FlowIn)
+
     #all values higher than mean value of season
-    FlowUnder=ma.masked_where(nondriven-FMean > 0.0,nondriven) 
+    FlowUnder=ma.masked_where(nondriven-FMean > 0.0,nondriven)
     FlowUnder.unshare_mask()
     return getRecess(FlowUnder)
 
@@ -140,6 +140,58 @@ def peakdet(v, delta, x = None):
 
     return maxtab, mintab
 
+def dry_wet_spells(ts, threshold):
+ """
+ returns the duration of spells below and above threshold
+
+ input
+ -----
+ ts          a pandas timeseries
+ threshold   threshold below and above which dates are counted
+
+ output
+ ------
+ ntot_ts               total number of measurements in ts
+ n_lt_threshold        number of measurements below threshold
+ storage_n_cons_days   array that stores the lengths of sequences
+                       storage_n_cons_days[0] for dry days
+                       storage_n_cons_days[1] for wet days
+ """
+ # total number in ts
+ ntot_ts = ts[~ ts.isnull()].count()
+ # number lt threshold
+ n_lt_threshold = ts[ts <= threshold].count()
+
+ # type_day = 0   # dry
+ # type_day = 1   # wet
+
+ # initialisierung: was ist der erste Tag
+ type_prev_day = 0
+ storage_n_cons_days = [[],[]]
+ n_cons_days = 0
+
+ for cur_day in ts[~ ts.isnull()]:
+     # current day is dry
+     if cur_day <= threshold:
+         type_cur_day = 0
+         if type_cur_day == type_prev_day:
+             n_cons_days += 1
+         else:
+             storage_n_cons_days[1].append(n_cons_days)
+             n_cons_days = 1
+         type_prev_day = type_cur_day
+     else:
+         type_cur_day = 1
+         if type_cur_day == type_prev_day:
+             n_cons_days += 1
+         else:
+             storage_n_cons_days[0].append(n_cons_days)
+             n_cons_days = 1
+         type_prev_day = type_cur_day
+
+ return ntot_ts, n_lt_threshold, storage_n_cons_days
+
+# ntot_ts, n_lt_threshold, storage_n_cons_days = dry_wet_spells(raindata['P05_039'], 0.2)
 
 ###########################################################################
 ###IMPORT DATA                                                           ##
@@ -189,19 +241,3 @@ def peakdet(v, delta, x = None):
 #def POT(Timeserie,kp,f,qlim):
 #    if len(v) != len(x):
 #        sys.exit('Input vectors v and x must have same length')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
