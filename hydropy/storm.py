@@ -170,7 +170,6 @@ def _make_comparable(axes):
         flowmax = max(ymaxes[1::2])
         newmaxes = [rainmax, flowmax]*nplots
         for axs, nmax in zip(axes, newmaxes):
-            print axs, nmax
             axs = axs.set_ybound(upper=nmax)
     else:
         ymaxes = [max(axs.get_yticks()) for axs in axes[1:]]

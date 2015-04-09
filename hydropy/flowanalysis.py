@@ -590,9 +590,9 @@ class HydroAnalysis():
                             number_of_storms=number_of_storms,
                             drywindow=drywindow)
         if makeplot:
-            plotstorms(self.data[column], rainserie, storms,
-               make_comparable = True,
-               period_title = True)
+            fig, axes = plotstorms(self.data[column], rainserie, storms,
+                                   make_comparable=True,
+                                   period_title=True)
         return storms
 
 #%%
