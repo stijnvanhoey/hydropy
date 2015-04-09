@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov 27 18:14:28 2013
+Hydropy package
 
-@author: VHOEYS
+@author: Stijn Van Hoey
 """
 
 import datetime

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 10 12:04:27 2014
+Hydropy package
 
-@author: stvhoey
+@author: Stijn Van Hoey
 """
 
 import numpy as np
@@ -12,6 +12,7 @@ sns.set_style('whitegrid')
 import matplotlib.pyplot as plt
 
 from hydropy import HydroAnalysis
+from storm import selectstorms
 
 flowdata = pd.read_pickle("../data/FlowData")
 raindata = pd.read_pickle("../data/RainData")
@@ -43,8 +44,7 @@ myflowserie['LS06_347'].get_year('2010').get_month("Jul").get_lowpeaks(50, below
 myflowserie['LS06_347'].get_year('2010').get_month("Jul").plot(ax=ax)
 
 #%%
-
-
+selectstorms(flowdata['LS06_347'], raindata['P05_039'], number_of_storms = 3, drywindow = 96)
 
 
 
