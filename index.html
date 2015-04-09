@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Hydropy by stijnvanhoey</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Hydropy</h1>
+        <p class="header">Analysis of hydrological oriented time series.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/stijnvanhoey/hydropy/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/stijnvanhoey/hydropy/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/stijnvanhoey/hydropy">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/stijnvanhoey">stijnvanhoey</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="hydropy" class="anchor" href="#hydropy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hydropy</h1>
+
+<p>Analysis of hydrological oriented time series. Basically, the package adds domain-specific functionalities to Pandas DataFrames, while keeping the power of it.</p>
+
+<p>Examples are:</p>
+
+<pre><code># Recession periods in June 2011:
+myflowserie.get_year('2011').get_month("Jun").get_recess()
+</code></pre>
+
+<p><img src="./data/recession.png" alt="Recession periods"></p>
+
+<pre><code># Peak values above 90th percentile for station LS06_347 in july 2010:
+myflowserie['LS06_347'].get_year('2010').get_month("Jul").get_highpeaks(150, above_percentile=0.9)
+</code></pre>
+
+<p><img src="./data/peaks.png" alt="Selected peaks"></p>
+
+<pre><code># Select 3 storms out of the series
+storms = myflowserie.derive_storms(raindata['P06_014'], 'LS06_347', number_of_storms=3, drywindow=96, makeplot=True)
+</code></pre>
+
+<p><img src="./data/storms.png" alt="Selected storms"></p>
+
+<p>A more extended tutorial/introduction is provided in a ipython notebook. See the output at <a href="http://nbviewer.ipython.org/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb">http://nbviewer.ipython.org/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb</a></p>
+
+<p>To install this, git clone the repo and then install it by:</p>
+
+<pre><code>python setup.py install
+</code></pre>
+
+<p>Inspiration or possible useful extensions:</p>
+
+<ul>
+<li>Basically this is a restart of hydropy <a href="https://code.google.com/p/hydropy/">https://code.google.com/p/hydropy/</a>
+</li>
+<li>Hydroclimpy <a href="http://hydroclimpy.sourceforge.net/">http://hydroclimpy.sourceforge.net/</a>
+</li>
+<li>Georgakakos2004, ROC</li>
+<li><a href="http://cran.r-project.org/web/packages/hydroTSM/vignettes/hydroTSM_Vignette.pdf">http://cran.r-project.org/web/packages/hydroTSM/vignettes/hydroTSM_Vignette.pdf</a></li>
+</ul>
+
+<p>The slides version of the notebook was made with nbconvert (using reveal.js), by following command:</p>
+
+<pre><code>ipython nbconvert hydropy_tutorial.ipynb --to=slides --post=serve --reveal-prefix=reveal.js --config slides_config.py
+</code></pre>
+
+<p>Copyright (c) 2015, Stijn Van Hoey</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
