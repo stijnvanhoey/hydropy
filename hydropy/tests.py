@@ -18,6 +18,7 @@ flowdata = pd.read_pickle("../data/FlowData")
 raindata = pd.read_pickle("../data/RainData")
 flow2use = flowdata["L06_347"]
 
+#%%
 myflowserie = HydroAnalysis(flowdata)#, datacols=['LS06_342'])
 myflowserie_short = myflowserie['LS06_347'].get_year("2010")
 

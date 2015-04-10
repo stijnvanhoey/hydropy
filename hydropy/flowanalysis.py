@@ -54,10 +54,10 @@ class HydroAnalysis():
             when None, all columns are interpreted as data column
         """
         if isinstance(data, pd.DataFrame):
-            self.data = data
+            self.data = data.copy()
         else:
             try:
-                self.data = pd.DataFrame(data)
+                self.data = pd.DataFrame(data.copy())
             except:
                 raise Exception("Input data not convertable to DataFrame.")
 
