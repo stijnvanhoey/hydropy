@@ -250,7 +250,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="o">%</span><span class="k">matplotlib</span> inline
@@ -265,7 +265,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -284,7 +284,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">flowdata</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s">&quot;./data/FlowData&quot;</span><span class="p">)</span>
@@ -312,7 +312,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c">#Loading the hydropy package</span>
@@ -339,7 +339,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">HTML</span><span class="p">(</span><span class="s">&#39;&lt;iframe src=http://biomath.ugent.be/~stvhoey/maarkebeek_data/ width=700 height=350&gt;&lt;/iframe&gt;&#39;</span><span class="p">)</span>
@@ -353,7 +353,7 @@ div.output_prompt {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[15]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <iframe src=http://biomath.ugent.be/~stvhoey/maarkebeek_data/ width=700 height=350></iframe>
@@ -381,7 +381,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">flowdata</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -395,7 +395,7 @@ div.output_prompt {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[16]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div style="max-height:1000px;max-width:1500px;overflow:auto;">
@@ -483,11 +483,11 @@ div.output_prompt {
 </div>
 </div>
 
-</div><div class="fragment" data-fragment-index="9">
+</div></section><section>
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">flowdata</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
@@ -501,7 +501,7 @@ div.output_prompt {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[17]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div style="max-height:1000px;max-width:1500px;overflow:auto;">
@@ -589,12 +589,11 @@ div.output_prompt {
 </div>
 </div>
 
-</div>
-    </div><div class="fragment" data-fragment-index="10">
+</div></section><section>
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">flowdata</span><span class="p">),</span> <span class="s">&#39;records&#39;</span><span class="p">,</span> <span class="s">&#39;from&#39;</span><span class="p">,</span> <span class="n">flowdata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;till&#39;</span><span class="p">,</span> <span class="n">flowdata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -618,8 +617,7 @@ div.output_prompt {
 </div>
 </div>
 
-</div>
-    </div></section>
+</div></section>
     </section><section>
     <section>
     
@@ -636,7 +634,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">myflowserie</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">HydroAnalysis</span><span class="p">(</span><span class="n">flowdata</span><span class="p">)</span>
@@ -663,7 +661,7 @@ div.output_prompt {
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">myflowserie</span><span class="o">.</span><span class="n">get_year</span><span class="p">(</span><span class="s">&#39;2009&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_season</span><span class="p">(</span><span class="s">&#39;summer&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
@@ -677,11 +675,11 @@ div.output_prompt {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[20]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[21]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fa9760ce410&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f9eafddedd0&gt;</pre>
 </div>
 
 </div>
@@ -1311,7 +1309,7 @@ BwmchRBCCCGEmAcJnIUQQgghhJgHCZyFEEIIIYSYh/8HgJ+HJbgPzO0AAAAASUVORK5CYII=
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">myflowserie</span><span class="o">.</span><span class="n">get_year</span><span class="p">(</span><span class="s">&#39;2011&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_month</span><span class="p">(</span><span class="s">&quot;Jun&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_recess</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
@@ -1325,11 +1323,11 @@ BwmchRBCCCGEmAcJnIUQQgghhJgHCZyFEEIIIYSYh/8HgJ+HJbgPzO0AAAAASUVORK5CYII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[21]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fa976968890&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f9eb0f48e10&gt;</pre>
 </div>
 
 </div>
@@ -1973,7 +1971,7 @@ NBqNZr1CC8AajUaj0Wg0mvWK/wcWF/nDW9KQfwAAAABJRU5ErkJggg==
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -1989,11 +1987,11 @@ NBqNZr1CC8AajUaj0Wg0mvWK/wcWF/nDW9KQfwAAAABJRU5ErkJggg==
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[23]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fa976829410&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f9eb0bdf9d0&gt;</pre>
 </div>
 
 </div>
@@ -2334,13 +2332,12 @@ ABCxzu+OPT5C/mkAAAAASUVORK5CYII=
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">storms</span> <span class="o">=</span> <span class="n">myflowserie</span><span class="o">.</span><span class="n">derive_storms</span><span class="p">(</span><span class="n">raindata</span><span class="p">[</span><span class="s">&#39;P06_014&#39;</span><span class="p">],</span> <span class="s">&#39;LS06_347&#39;</span><span class="p">,</span>
                                    <span class="n">number_of_storms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">drywindow</span><span class="o">=</span><span class="mi">96</span><span class="p">,</span>
                                    <span class="n">makeplot</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">storms</span>
 </pre></div>
 
 </div>
@@ -2350,20 +2347,6 @@ ABCxzu+OPT5C/mkAAAAASUVORK5CYII=
 <div class="output_wrapper">
 <div class="output">
 
-
-<div class="output_area"><div class="prompt output_prompt">Out[23]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[{&apos;enddate&apos;: Timestamp(&apos;2010-11-19 21:15:00&apos;),
-  &apos;startdate&apos;: Timestamp(&apos;2010-11-07 15:00:00&apos;, offset=&apos;15T&apos;)},
- {&apos;enddate&apos;: Timestamp(&apos;2011-01-17 14:30:00&apos;),
-  &apos;startdate&apos;: Timestamp(&apos;2011-01-10 06:30:00&apos;, offset=&apos;15T&apos;)},
- {&apos;enddate&apos;: Timestamp(&apos;2009-01-26 09:45:00&apos;),
-  &apos;startdate&apos;: Timestamp(&apos;2009-01-21 06:15:00&apos;, offset=&apos;15T&apos;)}]</pre>
-</div>
-
-</div>
 
 <div class="output_area"><div class="prompt"></div>
 
@@ -3094,7 +3077,7 @@ iIiIhIASaxERERGREPj/X2gcetyG/eoAAAAASUVORK5CYII=
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">myflowserie</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">&#39;season&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -3108,7 +3091,7 @@ iIiIhIASaxERERGREPj/X2gcetyG/eoAAAAASUVORK5CYII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[24]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[26]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div style="max-height:1000px;max-width:1500px;overflow:auto;">
