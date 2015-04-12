@@ -22,6 +22,8 @@ Examples are:
 
 A more extended tutorial/introduction is provided in a ipython notebook. See the output at http://nbviewer.ipython.org/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
 
+We acknowledge the Flemish Environmental Agency (VMM) for the data used in the tutorial. It can be downloaded from http://www.waterinfo.be/.
+
 To install this, git clone the repo and then install it by:
 
     python setup.py install
