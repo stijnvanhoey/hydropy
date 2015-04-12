@@ -37,6 +37,8 @@ Inspiration or possible useful extensions:
 The slides version of the notebook was made with nbconvert (using reveal.js), by following command:
 
     ipython nbconvert hydropy_tutorial.ipynb --to=slides --post=serve --reveal-prefix=reveal.js --config slides_config.py
+    
+http://nbviewer.ipython.org/format/slides/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb#/
 
 
 Copyright (c) 2015, Stijn Van Hoey
