@@ -17,7 +17,9 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.ticker import LinearLocator
 
-def selectstorms(flowserie, rainserie, number_of_storms = 3, drywindow = 96):
+def selectstorms(flowserie, rainserie, number_of_storms=3,
+                 min_period_in_between=7, search_period=7,
+                 drywindow=96):
     """ (pd.DataFrame, pd.DataFrame) -> List
     Easy storm selection process, based on the maximum flows measured
     in the given timeserie of flow measurements.
@@ -35,7 +37,14 @@ def selectstorms(flowserie, rainserie, number_of_storms = 3, drywindow = 96):
         Pandas Series with the date in the index
     rainserie : pd.Series
         Pandas Series with the date in the index
-
+    number_of_storms : int
+        Number of storms you want to select
+    min_period_in_between : int (days)
+        Minimum number of days in between to selected storms
+    search_period : int (days)
+        Period to look for the start of the storm, when rain started
+    drywindow : int
+        Number of timesteps to check for no-rain
     """
     if not isinstance(flowserie, pd.Series):
         raise Exception('flowserie is a single data Series')
@@ -50,7 +59,8 @@ def selectstorms(flowserie, rainserie, number_of_storms = 3, drywindow = 96):
     except:
         temp.sort(ascending=False)
 
-    #find in the index three periods which are at least a week from each other
+    #find in the index three periods which are at least given number
+    # of days from each other
     #after three concurrences, save these dates
     stormmax = [temp.index[0]] #first element is a selected storm
     i = 1
@@ -58,7 +68,8 @@ def selectstorms(flowserie, rainserie, number_of_storms = 3, drywindow = 96):
         #check for each period
         alldif = True
         for stormdate in stormmax:
-            if abs(temp.index[i] - stormdate) < datetime.timedelta(days=7):
+            if abs(temp.index[i] - stormdate) \
+                    < datetime.timedelta(days=min_period_in_between):
                 alldif = False
         #if new stormperiod, select
         if alldif:
@@ -69,7 +80,8 @@ def selectstorms(flowserie, rainserie, number_of_storms = 3, drywindow = 96):
     for storm in stormmax:
         ##FIND DRY DAY WEEK BEFORE
         #select period before storm (1 week)
-        temp1 = rainserie[storm - Week():storm]
+        presearchperiod = datetime.timedelta(days=search_period)
+        temp1 = rainserie[storm - presearchperiod:storm]
         temp1 = pd.rolling_sum(temp1, window=drywindow, center=False)
         #zero value means the preceding 24hours no rain: so, closest zeros
         #to the date itself -24h are selected
@@ -77,7 +89,7 @@ def selectstorms(flowserie, rainserie, number_of_storms = 3, drywindow = 96):
             temp1 = temp1.min(axis=1)
         tempdates = temp1[temp1 < 0.001].index.tolist()
         if len(tempdates) == 0:
-            raise Exception('Extend drywindow period before stormpoint.')
+            raise Exception('Decrease drywindow period containing no rain.')
 
         date_arg = np.argmin([abs(times - storm) for times in tempdates])
         startstormdate = tempdates[date_arg] - Day()
@@ -262,4 +274,3 @@ def plotstorms(flowserie, rainserie, selected_storm,
         _make_comparable(all_axes)
 
     return fig, all_axes
-
