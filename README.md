@@ -28,6 +28,9 @@ To install this, git clone the repo and then install it by:
 
     python setup.py install
 
+To test the functionalities yourself without installing it, use following test environment provided by Binder: 
+[![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/repo/stijnvanhoey/hydropy)
+
 Inspiration or possible useful extensions:
 * Basically this is a restart of hydropy https://code.google.com/p/hydropy/
 * Hydroclimpy http://hydroclimpy.sourceforge.net/
