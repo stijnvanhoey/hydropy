@@ -4,12 +4,13 @@ Reading data files from external sources
 
 Stijn Van Hoey, stvhoey.vanhoey@ugent.be
 """
+from __future__ import absolute_import, print_function
 
 import os
 import sys
 
 import ftplib
-import StringIO
+from io import StringIO
 import datetime
 
 import pandas as pd
@@ -38,8 +39,8 @@ def load_VMM_zrx_timeserie(filename):
     while ctest == '#':
         ctest = ctestall.readline()[0]
         headerlength += 1
-    print 'File ', filename.split("\\")[-1],\
-            ' headerlength is: ', headerlength-1
+    print('File ', filename.split("\\")[-1],\
+            ' headerlength is: ', headerlength-1)
     zrxf.close()
 
     #Read the data
@@ -113,7 +114,7 @@ def load_VMM_zrx_timeseries_from_ftp(server, login, password,
         while ctest == '#':
             ctest = ctestall.readline()[0]
             headerlength += 1
-        print 'File ',zrxf,' headerlength is: ', headerlength-1
+        print('File ',zrxf,' headerlength is: ', headerlength-1)
 
         temp = pd.read_table(StringIO.StringIO(output.getvalue()), sep=' ',
                            skiprows=headerlength-1, index_col=0,
