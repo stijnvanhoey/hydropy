@@ -4,6 +4,7 @@ Hydropy package
 
 @author: Stijn Van Hoey
 """
+from __future__ import absolute_import, print_function
 
 import datetime
 
@@ -106,7 +107,7 @@ def selectstorms(flowserie, rainserie, number_of_storms=3,
         flowbase = temp2.ix[startstormdate]
         lowerafterstorm = temp2[temp2 < flowbase][storm + Day():]
         if lowerafterstorm.size == 0:
-            print 'Lower initial flow not found again...test with mean...'
+            print('Lower initial flow not found again...test with mean...')
             if flowserie.ndim == 2:
                 temp2 = temp2a.mean(axis=1)
             else:
@@ -115,8 +116,8 @@ def selectstorms(flowserie, rainserie, number_of_storms=3,
             lowerafterstorm = temp2[temp2 < flowbase][storm + Day():]
         cnt = 1
         while lowerafterstorm.size == 0:
-            print '...    still not working; relaxing conditions...', \
-                cnt*10, '% of minimal after storm incorporated'
+            print('...    still not working; relaxing conditions...', \
+                cnt*10, '% of minimal after storm incorporated')
             flowbase = flowbase + 0.1*flowbase
             lowerafterstorm = temp2[temp2 < flowbase][storm + Day():]
             cnt += 1

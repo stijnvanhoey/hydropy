@@ -4,6 +4,7 @@ Hydropy package
 
 @author: Stijn Van Hoey
 """
+from __future__ import absolute_import, print_function
 
 import datetime
 import calendar
@@ -13,8 +14,8 @@ from scipy.signal import argrelmax, argrelmin
 import pandas as pd
 from pandas.tseries.offsets import DateOffset
 
-from storm import selectstorms, plotstorms
-from reading_third_party_data import load_VMM_zrx_timeserie
+from .storm import selectstorms, plotstorms
+from .reading_third_party_data import load_VMM_zrx_timeserie
 
 class HydroAnalysis():
     '''
@@ -74,7 +75,7 @@ class HydroAnalysis():
         #Extract the meta-information (frequency,... and save it)
         if self.data.index.freq:
             self._frequency = self.data.index.freq
-            #print "Frequency of the Time Serie is", self.data.index.freqstr
+            #print("Frequency of the Time Serie is", self.data.index.freqstr)
         else:
             guessed_freq = self.data.index.inferred_freq
             if guessed_freq:
@@ -82,8 +83,8 @@ class HydroAnalysis():
                                                    freq=guessed_freq)
                 self._frequency = guessed_freq
                 #self.data = self.data.asfreq(guessed_freq) #needed?!?
-                #print "Frequency of the Time Serie is guessed as", \
-                #        self.data.index.freq
+                #print("Frequency of the Time Serie is guessed as", \
+                #        self.data.index.freq)
             else:
                 print("Not able to interpret the time serie frequency,\
                       run the frequency_change to define the frequency!")
@@ -144,7 +145,7 @@ class HydroAnalysis():
     def __setitem__(self, val):
         """
         """
-        print "not supported"
+        print("not supported")
 
     def _check_date_range(self, date2test):
         """controller for date range
@@ -251,7 +252,7 @@ class HydroAnalysis():
         """
         Returns summary/description of the data
         """
-        print 'Time series from', self._start_date, 'till', self._end_date
+        print('Time series from', self._start_date, 'till', self._end_date)
         return self._start_date, self._end_date
 
     @classmethod
@@ -349,7 +350,7 @@ class HydroAnalysis():
                                                     seasondates[season])
 
         season_enddate = season_startdate + DateOffset(months = 3)
-        #    print season + ": ", season_startdate, " till ", season_enddate
+        #    print(season + ": ", season_startdate, " till ", season_enddate)
         return season_startdate, season_enddate
 
     def get_data_only(self, dropna=True):
