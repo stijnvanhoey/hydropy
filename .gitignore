@@ -54,3 +54,7 @@ docs/_build/
 
 # ipython notebook
 .ipynb_checkpoints/
+
+# Spyder IDE
+.spyderproject
+*.spyderworkspace

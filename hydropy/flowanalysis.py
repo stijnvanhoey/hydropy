@@ -17,7 +17,8 @@ from pandas.tseries.offsets import DateOffset
 from .storm import selectstorms, plotstorms
 from .reading_third_party_data import load_VMM_zrx_timeserie
 
-class HydroAnalysis():
+
+class HydroAnalysis(object):
     '''
     The idea:
     handle the flow timeserie; definitions for splitting etc...
@@ -58,11 +59,12 @@ class HydroAnalysis():
             self.data = data.copy()
         else:
             try:
+                # What if the data doesn't have a copy() method?
                 self.data = pd.DataFrame(data.copy())
             except:
                 raise Exception("Input data not convertable to DataFrame.")
 
-        #Control is necessary about the time-step-information.
+        # Control is necessary about the time-step-information.
         if not isinstance(self.data.index, pd.DatetimeIndex):
             try:
 
@@ -72,18 +74,18 @@ class HydroAnalysis():
                 raise Exception("Date parsing not succeeded, \
                                         adapt dateformatstr-argument.")
 
-        #Extract the meta-information (frequency,... and save it)
+        # Extract the meta-information (frequency,... and save it)
         if self.data.index.freq:
             self._frequency = self.data.index.freq
-            #print("Frequency of the Time Serie is", self.data.index.freqstr)
+            # print("Frequency of the Time Serie is", self.data.index.freqstr)
         else:
             guessed_freq = self.data.index.inferred_freq
             if guessed_freq:
                 self.data.index = pd.DatetimeIndex(self.data.index,
                                                    freq=guessed_freq)
                 self._frequency = guessed_freq
-                #self.data = self.data.asfreq(guessed_freq) #needed?!?
-                #print("Frequency of the Time Serie is guessed as", \
+                # self.data = self.data.asfreq(guessed_freq) #needed?!?
+                # print("Frequency of the Time Serie is guessed as", \
                 #        self.data.index.freq)
             else:
                 print("Not able to interpret the time serie frequency,\
@@ -91,25 +93,25 @@ class HydroAnalysis():
 
         # names of columns to use as data column for specific functions
         if datacols is not None:
-            #check fo existence in dframe
+            # check fo existence in dframe
             for colname in datacols:
-                if not colname in self.data.columns:
+                if colname not in self.data.columns:
                     raise Exception(colname + " no current dataframe column name")
             self._data_cols = datacols
         else:
             self._data_cols = self.data.columns
 
-        #Save start and enddate of the timeserie
+        # Save start and enddate of the timeserie
         self._start_date = self.data.index[0]
         self._end_date = self.data.index[-1]
 
-        #get all years of the timeserie
+        # get all years of the timeserie
         self._years = range(self._start_date.year, self._end_date.year + 1)
 
         self._hemisphere = hemisphere
         self._season_type = season_type
 
-        #Create selection masks
+        # Create selection masks
         self._mask_seasons()
 
     def __str__(self):
@@ -120,9 +122,8 @@ class HydroAnalysis():
         for name in self._data_cols:
             message += name + ', '
         message += '\n ranging from ' + \
-                        self._start_date.strftime("%H:%M:%S %d/%m/%Y") + \
-                        ' till ' + \
-                        self._end_date.strftime("%H:%M:%S %d/%m/%Y")
+            self._start_date.strftime("%H:%M:%S %d/%m/%Y") + \
+            ' until ' + self._end_date.strftime("%H:%M:%S %d/%m/%Y")
         message += '\n with frequency ' + self.data.index.freqstr
         return message
 
@@ -136,7 +137,7 @@ class HydroAnalysis():
             return self.__class__(self.data[val].copy(), datacols=[val])
         elif isinstance(val, list):
             for name in val:
-                if not name in self._data_cols:
+                if name not in self._data_cols:
                     raise Exception("this selection not supported")
             return self.__class__(self.data[val].copy(), datacols=val)
         else:
@@ -260,7 +261,7 @@ class HydroAnalysis():
         """
         Interprets the database outcome of a vmm file-type zrx-file
         """
-        #todo
+        # TODO:
         vmm_serie = cls(load_VMM_zrx_timeserie(zrxfile))
         return vmm_serie
 
@@ -285,8 +286,8 @@ class HydroAnalysis():
         header : int
             Number of lines to skip
         """
-        date_index = pd.date_range(startdate, enddate, freq = freq)
-        flowserie = pd.read_csv(filename, header = header)
+        date_index = pd.date_range(startdate, enddate, freq=freq)
+        flowserie = pd.read_csv(filename, header=header)
         flowserie.index = date_index
 
         return cls(flowserie)
@@ -313,25 +314,25 @@ class HydroAnalysis():
 
         """
         if hemisphere == "north":
-            if definition_type  == "meteo":
-                return {"Summer" : "0601", "Autumn" : "0901",
-                           "Winter": "1201", "Spring": "0301"}
-            elif definition_type  == "astro":
-                return {"Summer" : "0621", "Autumn" : "0921",
-                           "Winter": "1221", "Spring": "0321"}
+            if definition_type == "meteo":
+                return {"Summer": "0601", "Autumn": "0901",
+                        "Winter": "1201", "Spring": "0301"}
+            elif definition_type == "astro":
+                return {"Summer": "0621", "Autumn": "0921",
+                        "Winter": "1221", "Spring": "0321"}
             else:
-                raise Exception("Choose between meteo or \
-                                    astro defined seasons.")
+                raise Exception("Choose between meteo or "
+                                "astro defined seasons.")
         elif hemisphere == "south":
-            if definition_type  == "meteo":
-                return {"Winter" : "0601", "Spring" : "0901",
-                           "Summer": "1201", "Autumn": "0301"}
-            elif definition_type  == "astro":
-                return {"Winter" : "0621", "Spring" : "0921",
-                           "Summer": "1221", "Autumn": "0321"}
+            if definition_type == "meteo":
+                return {"Winter": "0601", "Spring": "0901",
+                        "Summer": "1201", "Autumn": "0301"}
+            elif definition_type == "astro":
+                return {"Winter": "0621", "Spring": "0921",
+                        "Summer": "1221", "Autumn": "0321"}
             else:
-                raise Exception("Choose between meteo or \
-                                    astro defined seasons.")
+                raise Exception("Choose between meteo or "
+                                "astro defined seasons.")
         else:
             raise Exception("Choose between north and south hemisphere")
 
@@ -344,12 +345,12 @@ class HydroAnalysis():
     def season_dates(season, year, seasondates):
         """str, str, dict -> (pd.Timestamp, pd.Timestamp)
         """
-        season_startdate =  pd.Timestamp(year + seasondates[season])
+        season_startdate = pd.Timestamp(year + seasondates[season])
         if season == "Winter":
-            season_startdate = pd.Timestamp(str(int(year)-1) + \
-                                                    seasondates[season])
+            season_startdate = pd.Timestamp(str(int(year)-1) +
+                                            seasondates[season])
 
-        season_enddate = season_startdate + DateOffset(months = 3)
+        season_enddate = season_startdate + DateOffset(months=3)
         #    print(season + ": ", season_startdate, " till ", season_enddate)
         return season_startdate, season_enddate
 
@@ -369,9 +370,8 @@ class HydroAnalysis():
         for year in self._years:
             for season in seasons.keys():
                 season_start, \
-                    season_end = self.season_dates(season, str(year),
-                                                       seasons)
-                self.data.loc[season_start : season_end, "season"] = season
+                    season_end = self.season_dates(season, str(year), seasons)
+                self.data.loc[season_start: season_end, "season"] = season
 
     def get_date_range(self, start, end):
         """
@@ -379,7 +379,7 @@ class HydroAnalysis():
         """
         self._check_date_range(start)
         self._check_date_range(end)
-        return self.__class__(self.data.loc[start : end, :].copy(),
+        return self.__class__(self.data.loc[start: end, :].copy(),
                               datacols=self._data_cols)
 
     def get_year(self, year):
@@ -429,7 +429,7 @@ class HydroAnalysis():
         year, till march of the selected year.
         """
         season = season.capitalize()
-        #return self.__class__(self.data[self.data["season"] == season])
+        # return self.__class__(self.data[self.data["season"] == season])
         df = self.data[self.data["season"] == season].copy()
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
@@ -482,7 +482,7 @@ class HydroAnalysis():
         df = self._pass_freq(df)
         return self.__class__(df, datacols=self._data_cols)
 
-#%%
+# %%
     @staticmethod
     def _getridof_double_peaks(data):
         """
@@ -494,7 +494,7 @@ class HydroAnalysis():
         """
         diff = data.diff()
         data[diff == 0.] = data[diff == 0.] - 0.001
-        #data[diff == 0.] = data[diff == 0.] - 0.001
+        # data[diff == 0.] = data[diff == 0.] - 0.001
         # tt = temp.data[temp._data_cols].where(diff!=0.0, temp.data[temp._data_cols] + 0.001)
         return data
 
@@ -518,25 +518,25 @@ class HydroAnalysis():
         """
         percentilevalue = self.quantile(above_percentile)
 
-        #use the peaks_above_percentile function
+        # use the peaks_above_percentile function
         peakcleaned = self._getridof_double_peaks(self.data[self._data_cols].copy())
         selected_peaks = argrelmax(peakcleaned.values, order=min_distance,
-                                          mode='wrap', axis=0)
+                                   mode='wrap', axis=0)
 
         # Get the rows with peaks (for any station)
         # select unique rows to keep indices at dframe level later on
         rows, rev_ind = np.unique(selected_peaks[0], return_inverse=True)
-        #peakrows = peakcleaned.iloc[rows, :]
-        peakrows = self.data.ix[rows, self._data_cols].copy() #original data use
+        # peakrows = peakcleaned.iloc[rows, :]
+        peakrows = self.data.ix[rows, self._data_cols].copy()  # original data use
 
         # building dummy matrix for element selection of dframe
         temp1 = np.zeros_like(peakrows.values)
         for i, j in zip(rev_ind, selected_peaks[1]):
                 temp1[i, j] = 1.
         high_peaks = temp1 * peakrows
-        high_peaks[high_peaks==0] = np.nan
+        high_peaks[high_peaks == 0] = np.nan
 
-        #Only keep the ones above percentile value
+        # Only keep the ones above percentile value
         high_peaks = high_peaks[high_peaks > percentilevalue]
 
         high_peaks = high_peaks.reindex(index=self.data.index)
@@ -556,47 +556,47 @@ class HydroAnalysis():
         """
         percentilevalue = self.quantile(below_percentile)
 
-        #use the peaks_above_percentile function
+        # use the peaks_above_percentile function
         peakcleaned = self._getridof_double_peaks(self.data[self._data_cols])
         selected_peaks = argrelmin(peakcleaned.values, order=min_distance,
-                                          mode='wrap', axis=0)
+                                   mode='wrap', axis=0)
 
         # Get the rows with peaks (for any station)
         # select unique rows to keep indices at dframe level later on
         rows, rev_ind = np.unique(selected_peaks[0], return_inverse=True)
-        #peakrows = peakcleaned.iloc[rows, :]
-        peakrows = self.data.ix[rows, self._data_cols].copy() #original data use
+        # peakrows = peakcleaned.iloc[rows, :]
+        peakrows = self.data.ix[rows, self._data_cols].copy()  # original data use
 
         # building dummy matrix for element selection of dframe
         temp1 = np.zeros_like(peakrows.values)
         for i, j in zip(rev_ind, selected_peaks[1]):
                 temp1[i, j] = 1.
         low_peaks = temp1 * peakrows
-        low_peaks[low_peaks==0] = np.nan
+        low_peaks[low_peaks == 0] = np.nan
 
-        #Only keep the ones below percentile value
+        # Only keep the ones below percentile value
         low_peaks = low_peaks[low_peaks < percentilevalue]
 
         low_peaks = low_peaks.reindex(index=self.data.index)
         return self.__class__(low_peaks, datacols=self._data_cols)
 
 
-#%%
+# %%
     def derive_storms(self, rainserie, column, number_of_storms=3,
                       drywindow=96, makeplot=True):
         """
         Select a number of storms out of the timeserie
         """
         storms = selectstorms(self.data[column], rainserie,
-                            number_of_storms=number_of_storms,
-                            drywindow=drywindow)
+                              number_of_storms=number_of_storms,
+                              drywindow=drywindow)
         if makeplot:
             fig, axes = plotstorms(self.data[column], rainserie, storms,
                                    make_comparable=True,
                                    period_title=True)
         return storms
 
-#%%
+# %%
     def _control_extra_serie(self):
         """check if extra time serie fits with the current dataset
         """
@@ -609,7 +609,7 @@ class HydroAnalysis():
         # use the baseflowdata
         return True
 
-#%%
+# %%
     def _get_modes_wagener(self, rain=None, lag_time=1):
         """ TODO
         Add column to data-sets providing information about:
@@ -635,14 +635,10 @@ class HydroAnalysis():
         referred to
         http://www.tandfonline.com/doi/pdf/10.1080/02626667.2013.866712
         """
-        if rain: #driven is initiated by rain
+        if rain:  # driven is initiated by rain
             True
 
-        else: #
+        else:
             True
 
         return True
-
-
-
-
