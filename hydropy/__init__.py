@@ -1,3 +1,6 @@
+__license__ = 'BSD'
+
+
 from __future__ import absolute_import, print_function
 
 from .baseflow import (get_baseflow_chapman,
