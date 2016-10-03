@@ -22,4 +22,5 @@ setup(name='hydropy',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: Scientific/Engineering :: Visualization',
         'Topic :: Utilities'
-    ],)
+    ],
+        test_suite='tests',)

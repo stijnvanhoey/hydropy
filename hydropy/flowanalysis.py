@@ -58,6 +58,7 @@ class HydroAnalysis():
             self.data = data.copy()
         else:
             try:
+                # What if the data doesn't have a copy() method?
                 self.data = pd.DataFrame(data.copy())
             except:
                 raise Exception("Input data not convertable to DataFrame.")
