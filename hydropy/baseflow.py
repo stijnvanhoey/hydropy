@@ -4,6 +4,9 @@ Hydropy package
 
 @author: Stijn Van Hoey
 """
+import pandas as pd
+import numpy as np
+
 
 def get_baseflow_chapman(flowserie, recession_time):
     """
@@ -33,7 +36,8 @@ def get_baseflow_chapman(flowserie, recession_time):
         else:
             baseflow[i] = recession_time*baseflow[i-1]/(2.-recession_time) + \
                             secterm.values[i]
-    return pd.TimeSeries(baseflow, index = flowserie.index)
+    return pd.TimeSeries(baseflow, index=flowserie.index)
+
 
 def get_baseflow_boughton(flowserie, recession_time, baseflow_index):
     """
@@ -55,7 +59,7 @@ def get_baseflow_boughton(flowserie, recession_time, baseflow_index):
     if not isinstance(flowserie, pd.TimeSeries):
         raise Exception("Not a pd.TimeSerie as input")
 
-    parC =  baseflow_index
+    parC = baseflow_index
 
     secterm = parC*flowserie/(1 + parC)
 
@@ -66,7 +70,8 @@ def get_baseflow_boughton(flowserie, recession_time, baseflow_index):
         else:
             baseflow[i] = recession_time*baseflow[i-1]/(1 + parC) + \
                             secterm.values[i]
-    return pd.TimeSeries(baseflow, index = flowserie.index)
+    return pd.TimeSeries(baseflow, index=flowserie.index)
+
 
 def get_baseflow_ihacres(flowserie, recession_time, baseflow_index, alfa):
     """
@@ -88,7 +93,7 @@ def get_baseflow_ihacres(flowserie, recession_time, baseflow_index, alfa):
     if not isinstance(flowserie, pd.TimeSeries):
         raise Exception("Not a pd.TimeSerie as input")
 
-    parC =  baseflow_index
+    parC = baseflow_index
 
     secterm = parC/(1 + parC)
 
@@ -97,7 +102,7 @@ def get_baseflow_ihacres(flowserie, recession_time, baseflow_index, alfa):
         if i == 0:
             baseflow[i] = 0.0
         else:
-            baseflow[i] = recession_time*baseflow[i-1]/(1 + parC) + \
-                            secterm*(flowserie.values[i] + \
-                                        alfa*flowserie.values[i-1])
-    return pd.TimeSeries(baseflow, index = flowserie.index)
+            baseflow[i] = recession_time * baseflow[i-1]/(1 + parC) + \
+                            secterm * (flowserie.values[i] +
+                                       alfa * flowserie.values[i-1])
+    return pd.TimeSeries(baseflow, index=flowserie.index)

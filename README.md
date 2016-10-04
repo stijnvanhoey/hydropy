@@ -3,6 +3,8 @@ Hydropy
 
 Analysis of hydrological oriented time series. Basically, the package adds domain-specific functionalities to Pandas DataFrames, while keeping the power of it.
 
+* Free software: BSD license
+
 Examples are:
 
     # Recession periods in June 2011:
@@ -28,7 +30,7 @@ To install this, git clone the repo and then install it by:
 
     python setup.py install
 
-To test the functionalities yourself without installing it, use following test environment provided by Binder: 
+To test the functionalities yourself without installing it, use following test environment provided by Binder:
 [![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/repo/stijnvanhoey/hydropy)
 
 Inspiration or possible useful extensions:
@@ -40,7 +42,7 @@ Inspiration or possible useful extensions:
 The slides version of the notebook was made with nbconvert (using reveal.js), by following command:
 
     ipython nbconvert hydropy_tutorial.ipynb --to=slides --post=serve --reveal-prefix=reveal.js --config slides_config.py
-    
+
 http://nbviewer.ipython.org/format/slides/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb#/
 
 

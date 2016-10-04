@@ -4,18 +4,20 @@ Hydropy package
 
 @author: Stijn Van Hoey
 """
+from __future__ import absolute_import, print_function
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
-sns.set_style('whitegrid')
+# TOSO: nose2 wasn't finding seaborn
+#import seaborn as sns
+#sns.set_style('whitegrid')
 import matplotlib.pyplot as plt
 
-from hydropy import HydroAnalysis
-from storm import selectstorms, plotstorms
+from .flowanalysis import HydroAnalysis
+from .storm import selectstorms, plotstorms
 
-flowdata = pd.read_pickle("../data/FlowData")
-raindata = pd.read_pickle("../data/RainData")
+flowdata = pd.read_pickle("data/FlowData")
+raindata = pd.read_pickle("data/RainData")
 flow2use = flowdata["L06_347"]
 
 #%%
@@ -66,6 +68,8 @@ class TestGetFunctions():
         """
         Test different month approach functions
         """
+        flowdata = pd.read_pickle("data/FlowData")
+        temp = HydroAnalysis(flowdata)
         ms1 = temp.get_month("June").get_recess().data # full name
         ms2 = temp.get_month(6).get_recess().data # id
         assert_frame_equal(ms1, ms2)
