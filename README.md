@@ -1,5 +1,4 @@
-Hydropy
-=======
+#Hydropy
 
 Analysis of hydrological oriented time series. Basically, the package adds domain-specific functionalities to Pandas DataFrames, while keeping the power of it.
 
@@ -45,5 +44,7 @@ The slides version of the notebook was made with nbconvert (using reveal.js), by
 
 http://nbviewer.ipython.org/format/slides/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb#/
 
+## Developers
 
-Copyright (c) 2015, Stijn Van Hoey
+* Stijn Van Hoey
+* Martin Roberge
