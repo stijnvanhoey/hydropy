@@ -11,65 +11,7 @@ import pandas as pd
 from hydropy import reading_third_party_data as r3p
 from hydropy import exceptions
 
-
-class TestReadVMM(unittest.TestCase):
-
-    def test_r3p_load_VMM_zrx_timeserie_returns_df(self):
-        pass
-
-
-class TestGetUSGS(unittest.TestCase):
-
-    @mock.patch('requests.get')
-    def test_r3p_request_nwis_calls_with_expected_params(self, mock_get):
-
-        """
-        Thanks to
-        http://engineroom.trackmaven.com/blog/making-a-mockery-of-python/
-        """
-
-        site = 'A'
-        service = 'B'
-        start = 'C'
-        end = 'D'
-
-        expected_url = 'http://waterservices.usgs.gov/nwis/B/?'
-        expected_headers = {'max-age': '120', 'Accept-encoding': 'gzip'}
-        expected_params = {'format': 'json,1.1', 'sites': 'A', 'endDT': 'D',
-                           'startDT': 'C', 'parameterCd': '00060'}
-        expected = 'mock data'
-
-        mock_get.return_value = expected
-        actual = r3p.request_nwis(site, service, start, end)
-        mock_get.assert_called_once_with(expected_url, params=expected_params,
-                                         headers=expected_headers)
-        self.assertEqual(actual, expected)
-
-
-    def test_r3p_extract_nwis_df_raises_HydroNoDataError(self):
-        """Call extract_nwis_df with a fake object.
-        Normally, it is expecting a Requests response object with a
-        functioning .json() method. Surprise! Instead we send a fake response,
-        with a .json() method that returns nothing.
-        Will this raise an error?  Let's find out:
-        """
-        # alternative 1: class Fake(object): json = lambda: []
-        # alternative 2: make a new response object from the requests lib.
-        class FakeResponse(object):
-            def json():
-                my_json = {'value': {'timeSeries': []}}
-                return my_json
-
-        fake_response = FakeResponse
-
-        with self.assertRaises(exceptions.HydroNoDataError):
-            r3p.extract_nwis_df(fake_response)
-
-
-    def test_r3p_extract_nwis_df(self):
-        class FakeResponse(object):
-            def json():
-                my_json = {'declaredType': 'org.cuahsi.waterml.TimeSeriesResponseType',
+good_json = {'declaredType': 'org.cuahsi.waterml.TimeSeriesResponseType',
  'globalScope': True,
  'name': 'ns1:timeSeriesResponseType',
  'nil': False,
@@ -151,8 +93,81 @@ class TestGetUSGS(unittest.TestCase):
      'variableDescription': 'Discharge, cubic feet per second',
      'variableName': 'Streamflow, ft&#179;/s',
      'variableProperty': []}}]}}
-                
+
+class TestReadVMM(unittest.TestCase):
+
+    def test_r3p_load_VMM_zrx_timeserie_returns_df(self):
+        pass
+
+
+class TestGetUSGS(unittest.TestCase):
+    """
+        Situation --> Expected result
+        user enters bad parameters --> an exception that explains the proper format.
+        user enters a start that is before end date --> ???
+        user enters a site that doesn't exist --> [] returned, HydroNoDataError
+        user enters dates with no data --> [] returned, HydroNoDataError
+        Weird Status Code returned --> Show it to the user
+
+        What conditions do I need to test get_usgs for?
+        Is an exception raised for bad inputs before request.get called?
+        Does request.get get called with correct parameters?
+        Does the returned response get handled properly?
+            response.ok == false  ...now what?
+        Does extract_nwis_df warn when there is no data?
+        Does extract_nwis_df extract a nicely formed df?
+    """
+
+    @mock.patch('requests.get')
+    def test_r3p_request_nwis_calls_with_expected_params(self, mock_get):
+        """
+        Thanks to
+        http://engineroom.trackmaven.com/blog/making-a-mockery-of-python/
+        """
+
+        site = 'A'
+        service = 'B'
+        start = 'C'
+        end = 'D'
+
+        expected_url = 'http://waterservices.usgs.gov/nwis/B/?'
+        expected_headers = {'max-age': '120', 'Accept-encoding': 'gzip'}
+        expected_params = {'format': 'json,1.1', 'sites': 'A', 'endDT': 'D',
+                           'startDT': 'C', 'parameterCd': '00060'}
+        expected = 'mock data'
+
+        mock_get.return_value = expected
+        actual = r3p.request_nwis(site, service, start, end)
+        mock_get.assert_called_once_with(expected_url, params=expected_params,
+                                         headers=expected_headers)
+        self.assertEqual(actual, expected)
+
+
+    def test_r3p_extract_nwis_df_raises_HydroNoDataError(self):
+        """Call extract_nwis_df with a fake object.
+        Normally, it is expecting a Requests response object with a
+        functioning .json() method. Surprise! Instead we send a fake response,
+        with a .json() method that returns NWIS json with no data.
+        Will this raise an error?  Let's find out:
+        """
+        # alternative 1: class Fake(object): json = lambda: []
+        # alternative 2: make a new response object from the requests lib.
+        class FakeResponse(object):
+            def json():
+                my_json = {'value': {'timeSeries': []}}
                 return my_json
+
+        fake_response = FakeResponse
+
+        with self.assertRaises(exceptions.HydroNoDataError):
+            r3p.extract_nwis_df(fake_response)
+
+
+    def test_r3p_extract_nwis_df(self):
+        # Does it really make sense to define a class inside of a test function
+        class FakeResponse(object):
+            def json():
+                return good_json
 
         fake_response = FakeResponse
 
@@ -160,7 +175,6 @@ class TestGetUSGS(unittest.TestCase):
         self.assertIs(type(actual), pd.core.frame.DataFrame,
                       msg="Did not return a df")
 
-    @unittest.skip("What happens if NWIS returns valid response with no data?")
-    def test_r3p_extract_nwis_raises_exception_when_df_is_empty(self):
-        # See line 78 in hydrofunctions
-        pass
+    @unittest.skip("Need more tests for get_usgs")
+    def test_r3p_get_usgs(self):
+        self.assertTrue(False)
