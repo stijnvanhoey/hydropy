@@ -327,6 +327,7 @@ def extract_nwis_df(response_obj):
     DF.value = DF.value.astype(float)
     # DF.index.name = None
     DF.index.name = 'datetime'
-    DF.replace(to_replace='-999999', value=np.nan)
+    # this is never tested
+    DF.replace(to_replace='-999999', value=np.nan, inplace=True)
 
     return DF

@@ -175,6 +175,11 @@ class TestGetUSGS(unittest.TestCase):
         self.assertIs(type(actual), pd.core.frame.DataFrame,
                       msg="Did not return a df")
 
+    @unittest.skip("Need to test whether missing values replaced with NaN")
+    def test_r3p_extract_nwis_df_replaces_novalues_NaN(self):
+        fail
+        
+        
     @unittest.skip("Need more tests for get_usgs")
     def test_r3p_get_usgs(self):
         self.assertTrue(False)
