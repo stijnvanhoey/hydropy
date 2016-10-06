@@ -246,10 +246,12 @@ def request_nwis(site, service, start_date, end_date):
     Example::
 
         >>> import hydropy as hp
-        >>> response = hp.get_nwis('01585200', 'dv', '2012-06-01', '2012-07-01')
-
+        >>> # this requests: http://waterservices.usgs.gov/nwis/dv/?format=json,1.1&sites=01585200&startDT=2012-06-01&endDT=2012-06-05
+        >>> response = hp.get_nwis('01585200', 'dv', '2012-06-01', '2012-06-05')
+        
+        
         >>> response
-        <respones [200]>
+        <response [200]>
         >>> response.ok
         True
         >>> response.json()
