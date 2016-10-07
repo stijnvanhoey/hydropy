@@ -13,8 +13,8 @@ import pandas as pd
 #sns.set_style('whitegrid')
 import matplotlib.pyplot as plt
 
-from .flowanalysis import HydroAnalysis
-from .storm import selectstorms, plotstorms
+from hydropy.flowanalysis import HydroAnalysis
+from hydropy.storm import selectstorms, plotstorms
 
 flowdata = pd.read_pickle("data/FlowData")
 raindata = pd.read_pickle("data/RainData")
@@ -60,19 +60,4 @@ storms = myflowserie.derive_storms(raindata['P06_014'], 'LS06_347',
                                    makeplot=True)
 
 #%% READY MADE FOR UNIT TEST PURPOSES
-from pandas.util.testing import assert_frame_equal
 
-class TestGetFunctions():
-
-    def test_get_month(self):
-        """
-        Test different month approach functions
-        """
-        flowdata = pd.read_pickle("data/FlowData")
-        temp = HydroAnalysis(flowdata)
-        ms1 = temp.get_month("June").get_recess().data # full name
-        ms2 = temp.get_month(6).get_recess().data # id
-        assert_frame_equal(ms1, ms2)
-
-        ms3 = temp.get_month("Jun").get_recess().data # abbr
-        assert_frame_equal(ms1, ms3)
