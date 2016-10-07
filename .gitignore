@@ -58,3 +58,5 @@ docs/_build/
 # Spyder IDE
 .spyderproject
 *.spyderworkspace
+*.cache
+.eggs/README.txt

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import absolute_import
 from setuptools import setup
 
 setup(name='hydropy',
@@ -10,7 +10,9 @@ setup(name='hydropy',
       author_email='stvhoey.vanhoey@ugent.be',
       license='BSD',
       include_package_data=True,
-      install_requires=['scipy', 'numpy', 'pandas', 'matplotlib', 'requests'],
+      install_requires=['scipy', 'numpy', 'pandas', 'matplotlib', 'seaborn',
+                        'requests'],
+      tests_require=['mock'],
       packages=['hydropy'],
       keywords='hydrology time series hydroTSM',
       test_suite='tests',
