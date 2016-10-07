@@ -5,7 +5,11 @@ test_reading_third_party_data.py
 
 from __future__ import absolute_import, print_function
 import unittest
-from unittest import mock
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 import pandas as pd
 
 from hydropy import reading_third_party_data as r3p
