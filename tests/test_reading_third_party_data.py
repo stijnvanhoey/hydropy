@@ -157,6 +157,7 @@ class TestGetUSGS(unittest.TestCase):
         # alternative 1: class Fake(object): json = lambda: []
         # alternative 2: make a new response object from the requests lib.
         class FakeResponse(object):
+            @staticmethod
             def json():
                 my_json = {'value': {'timeSeries': []}}
                 return my_json
@@ -170,6 +171,7 @@ class TestGetUSGS(unittest.TestCase):
     def test_r3p_extract_nwis_df(self):
         # Does it really make sense to define a class inside of a test function
         class FakeResponse(object):
+            @staticmethod
             def json():
                 return good_json
 
