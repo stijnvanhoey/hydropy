@@ -1,4 +1,3 @@
-from __future__ import absolute_import, print_function
 """
 # Hydropy
 
@@ -37,7 +36,7 @@ hydropy like this::
     >>> myflowserie.get_year('2009').get_season('summer').plot(figsize=(12,6))
 
 """
-
+from __future__ import absolute_import, print_function
 
 from .baseflow import (get_baseflow_chapman,
                        get_baseflow_boughton,
