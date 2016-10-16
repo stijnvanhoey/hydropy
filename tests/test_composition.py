@@ -80,10 +80,10 @@ class TestAnalysis(unittest.TestCase):
         self.assertEqual(expected, actual.source)
 
     def test_Analysis_accepts_dict(self):
-        actual = hp.Analysis({'blah':'blah'})
+        actual = hp.Analysis({'blah': 'blah'})
         expected = 'dict'
         self.assertEqual(expected, actual.source)
 
     def test_Analysis_raises_HydroSourceError_for_bad_source(self):
         with self.assertRaises(hp.HydroSourceError):
-            actual = hp.Analysis([1,2,3], source='nonsense')
+            actual = hp.Analysis([1, 2, 3], source='nonsense')

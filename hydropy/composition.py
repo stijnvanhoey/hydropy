@@ -222,29 +222,33 @@ class Analysis(object):
         >>> study2 = hp.Analysis(sites)
 
         """
-        # self.source = source
+        self.stations = []
+
+        # Phase 1: only accept lists & source as arguments.
+        #   if source:
+        #       categorize source;
+        #       for each item in list, make a new Station
+        #       append the Station to the list.
 
         print('new')
         if isinstance(data, list) and source is not None:
             print('A')
-            if source == 'usgs-dv':
+            if source == 'usgs-dv' or source == 'usgs-iv':
+                self.source = source
                 print('B')
                 for site in data:
-                    # call get_usgs and make a new Series.
-                    print(site)
-                self.source = source
-            elif source == 'usgs-iv':
-                print('C')
-                for site in data:
-                    # call get_usgs and make a new Series.
-                    print(site)
-                self.source = source
+                    new_station = hp.Station(site)
+                    new_station.source = source
+                    # call new_station.fetch(site, source, start=start, end=end)
+                    self.stations.append(new_station)
             else:
                 print('D')
                 # Raise an error if an unknown source is given.
                 raise hp.HydroSourceError("The {0} service is not implemented"
                                           "yet.".format(source))
+        # Phase 2: dealing with a dictionary as input.
         elif isinstance(data, dict):
+        
             self.source = 'dict'
 
 
