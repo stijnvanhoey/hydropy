@@ -150,7 +150,7 @@ class Station(object):
             self.data = hp.get_usgs(self.site, 'iv', self.start, self.end)
         else:
             raise hp.HydroSourceError('The source {0} is not defined.'
-                                    .format(source))
+                                      .format(source))
 
         return self
 
@@ -193,7 +193,7 @@ class Analysis(object):
     def __init__(self, data, source=None, **kwargs):
         """
         Initialize with a list of sites and their source, or a dataframe.
-        
+
         Arguments
         ---------
             data: a list of site ids
@@ -210,11 +210,16 @@ class Analysis(object):
 
         Example
         -------
+        Create a new Analysis object by passing a list of sites and a source:
 
-        >>>
+        >>> my_study = hp.Analysis(['01585200', '01582500'], source='usgs-dv')
 
-        Example:
-        --------
+        Create a new Analysis object by passing a list of dictionaries that
+        specify the site id and the data source:
+
+        >>> sites = [{site: '01585200', source: 'usgs-dv'},
+                     {site: '01582500', source: 'usgs-iv'}]
+        >>> study2 = hp.Analysis(sites)
 
         """
         # self.source = source
