@@ -9,8 +9,13 @@ import unittest
 
 from hydropy import exceptions
 
+
 class TestExceptions(unittest.TestCase):
 
     def test_exceptions_HydroNoDataError_can_be_raised(self):
         with self.assertRaises(exceptions.HydroNoDataError):
             raise exceptions.HydroNoDataError("Test Error!!")
+
+    def test_exceptions_HydroSourceError_can_be_raised(self):
+        with self.assertRaises(exceptions.HydroSourceError):
+            raise exceptions.HydroSourceError("Test Error!!")

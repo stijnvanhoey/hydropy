@@ -54,7 +54,8 @@ class HydroNoDataError(HydroException):
 
         Usage::
 
-            raise HydroNoDataError("The NWIS service had no data for this request.")
+            raise HydroNoDataError("The NWIS service had no data for this"
+                                   " request.")
 
         Do not catch this error for interactive sessions: The user should
         get a useful message from the error when they try to request something
@@ -63,5 +64,15 @@ class HydroNoDataError(HydroException):
         Catch this error in automated systems so that the system can reconsider
         the request and either fix the request or move on to the next
         request.
+    """
+    pass
+
+
+class HydroSourceError(HydroException):
+    """Raise when a data source is requested that isn't implemented yet.
+    
+    Usage::
+
+        raise HydroSourceError('The source {0} is not defined.'.format(source))
     """
     pass
