@@ -201,16 +201,15 @@ def get_usgs(site, service, start_date, end_date):
 
         >>> from hydropy import hydropy as hp
         >>> my_df = hp.get_usgs('01585200', 'dv', '2012-06-01', '2012-06-05')
-        
+
         >>> my_df
                     value
-        datetime         
+        datetime
         2012-06-01  97.00
         2012-06-02   5.80
         2012-06-03   1.70
         2012-06-04   1.40
         2012-06-05   0.96
-        
     """
     response_obj = request_nwis(site, service, start_date, end_date)
     nwis_df = extract_nwis_df(response_obj)
@@ -248,8 +247,8 @@ def request_nwis(site, service, start_date, end_date):
         >>> import hydropy as hp
         >>> # this requests: http://waterservices.usgs.gov/nwis/dv/?format=json,1.1&sites=01585200&startDT=2012-06-01&endDT=2012-06-05
         >>> response = hp.get_nwis('01585200', 'dv', '2012-06-01', '2012-06-05')
-        
-        
+
+
         >>> response
         <response [200]>
         >>> response.ok
@@ -270,7 +269,10 @@ def request_nwis(site, service, start_date, end_date):
         'format': 'json,1.1',
         'sites': site,
         'parameterCd': '00060',  # represents stream discharge.
-        # 'period': 'P10D' # This is the format for requesting data for a period before today
+        # 'period': 'P10D' # This is the format for requesting data for a
+        # number of days before today. If no start or end date are supplied,
+        # NWIS will default to period = 1 and return the most recent day of
+        # data.
         'startDT': start_date,
         'endDT': end_date
         }
