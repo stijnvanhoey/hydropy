@@ -149,7 +149,7 @@ class Station(object):
             # retrieve usgs iv data. Save to instantaneous values.
             self.data = hp.get_usgs(self.site, 'iv', self.start, self.end)
         else:
-            raise hp.HydroNameError('The source {0} is not defined.'
+            raise hp.HydroSourceError('The source {0} is not defined.'
                                     .format(source))
 
         return self

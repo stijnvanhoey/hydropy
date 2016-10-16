@@ -50,6 +50,22 @@ class TestStation(unittest.TestCase):
         mock_get.assert_called_once_with('any', 'iv', 'A', 'B')
         self.assertEqual(expected, actual.data)
 
+    @mock.patch('hydropy.get_usgs')
+    def test_Station_fetch_accepts_source_usgs_dv(self, mock_get):
+        expected = 'mock data'
+        mock_get.return_value = expected
+
+        actual = hp.Station('any')
+        actual.fetch(source='usgs-dv', start='A', end='B')
+
+        mock_get.assert_called_once_with('any', 'dv', 'A', 'B')
+        self.assertEqual(expected, actual.data)
+
+    def test_Station_raises_HydroSourceError_for_bad_source(self):
+        with self.assertRaises(hp.HydroSourceError):
+            actual = hp.Station("any")
+            actual.fetch(source='nonsense')
+
 
 class TestAnalysis(unittest.TestCase):
 
