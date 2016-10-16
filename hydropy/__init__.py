@@ -8,7 +8,7 @@ Analysis of hydrological oriented time series.
 This package is especially designed to simplify the collection and analysis of
 hydrology data in an interpretive Python session.  Use HydroPy in a Jupyter
 notebook and save your analysis so that you can recreate your procedures and
-share them with others.  
+share them with others.
 
 Hydropy uses the power of Numpy and Pandas to quickly process large datasets.
 
@@ -45,6 +45,8 @@ from .baseflow import (get_baseflow_chapman,
 from .storm import selectstorms, plotstorms
 from .flowanalysis import HydroAnalysis
 from .reading_third_party_data import get_usgs
+from .composition import Station, Analysis
+from .exceptions import HydroNoDataError, HydroSourceError
 
 __license__ = 'BSD'
 __title__ = 'hydropy'
