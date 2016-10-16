@@ -100,32 +100,43 @@ class Station(object):
         future, maybe set the fetch function when the object is initialized and
         then call it.
 
-        Arguments
+        Arguments:
         ---------
-            source: ('usgs-iv' | 'usgs-dv') the data source.
-            start: (date str) a string to represent the start date. right now,
-                this is just a string that gets passed to the usgs.
-            end: (date str) a string to represent the end date. right now,
-                this is just a string that gets passed to the usgs.
-            period: (int) number of days in the past to request data. Not
+            source ('usgs-iv' | 'usgs-dv'): the data source.
+
+            start (date str): a string to represent the start date. Right now,
+                this is just a string that gets passed to the usgs. It should
+                take on the form 'yyyy-mm-dd'.
+
+            end (date str): a string to represent the end date. It should
+                take on the form 'yyyy-mm-dd'
+
+            period (int): number of days in the past to request data. Not
                 implemented yet.
 
-        Returns
+        Returns:
         -------
             self
 
-        Raises
+        Raises:
         ------
             HydroSourceError: when a source that has not been implemented is
                 requested.
 
-        Example
+        Example:
         -------
 
         >>> HerringRun = Station('01585200')
         >>> HerringRun.fetch()
-        fetches the past 1 day of values.
-        
+
+        Fetches the past 1 day of values.
+
+        >>> StonyRun = Station('01589464')
+        >>> StonyRun.fetch(source='usgs-iv', start='2014-06-01',
+                           end='2014-06-04')
+
+        Fetches instantaneous values with a collection interval of 15 minutes
+        for June 1-4, 2014.
         """
         self.start = start
         self.end = end

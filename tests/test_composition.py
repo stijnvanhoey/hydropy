@@ -25,7 +25,7 @@ class TestStation(unittest.TestCase):
     def test_Station_str_returns_str(self):
         actual = hp.Station('any')
         # This might be a dumb test, because I think an error gets thrown if
-        # a str function doesn't return a string.  Hmmm.
+        # a __str__ function doesn't return a string.  Hmmm.
         self.assertIsInstance(actual.__repr__(), str)
 
     def test_Station_repr_returns_str(self):
@@ -37,6 +37,7 @@ class TestStation(unittest.TestCase):
         # IPython will take advantage of this function if it exists; The
         # purpose is to display a table of data as html instead of as a string.
         self.assertIsInstance(actual._repr_html_(), str)
+        # perhaps it also makes sense to do a regex to check for proper html?
 
     @mock.patch('hydropy.get_usgs')
     def test_Station_fetch_accepts_source_usgs_iv(self, mock_get):
