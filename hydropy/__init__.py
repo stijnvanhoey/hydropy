@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function
-
 """
 # Hydropy
 
@@ -38,6 +36,7 @@ hydropy like this::
     >>> myflowserie.get_year('2009').get_season('summer').plot(figsize=(12,6))
 
 """
+from __future__ import absolute_import, print_function
 
 from .baseflow import (get_baseflow_chapman,
                        get_baseflow_boughton,
@@ -45,6 +44,7 @@ from .baseflow import (get_baseflow_chapman,
 from .storm import selectstorms, plotstorms
 from .flowanalysis import HydroAnalysis
 from .reading_third_party_data import get_usgs
+from .ipython import draw_map
 
 __license__ = 'BSD'
 __title__ = 'hydropy'
