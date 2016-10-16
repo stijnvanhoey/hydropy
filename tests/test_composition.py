@@ -18,15 +18,25 @@ import hydropy as hp
 class TestStation(unittest.TestCase):
 
     def test_Station_inits_site(self):
-        temp = hp.Station('any')
-        actual = temp.site
+        actual = hp.Station('any')
         expected = 'any'
-        self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual.site)
 
-    @unittest.skip("Tests of _str_ and _repr_")
     def test_Station_str_returns_str(self):
-        temp = hp.Station('any')
-        self.assertIsInstance(print(temp), str)
+        actual = hp.Station('any')
+        # This might be a dumb test, because I think an error gets thrown if
+        # a str function doesn't return a string.  Hmmm.
+        self.assertIsInstance(actual.__repr__(), str)
+
+    def test_Station_repr_returns_str(self):
+        actual = hp.Station('any')
+        self.assertIsInstance(actual.__repr__(), str)
+
+    def test_Station_htmlrepr_returns_html(self):
+        actual = hp.Station('any')
+        # IPython will take advantage of this function if it exists; The
+        # purpose is to display a table of data as html instead of as a string.
+        self.assertIsInstance(actual._repr_html_(), str)
 
     @mock.patch('hydropy.get_usgs')
     def test_Station_fetch_accepts_source_usgs_iv(self, mock_get):
