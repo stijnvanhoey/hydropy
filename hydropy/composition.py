@@ -41,10 +41,21 @@ class Station(object):
         """Initialize the Station object by giving it an id that is derived
         from the id of the physical station site that is collecting the data.
         Save the **kwargs to the Station object.
+        
+        Example (future usage):
+        -----------------------
+        >>> newDF = pd.DataFrame(np.random.randn(10, 5))
+        >>> newHdf = hp.Station(newDF)
+
+        >>> new_data = np.random.randn(10, 5)
+        >>> newHdf2 = hp.Station(new_data, columns=['a', 'b', 'c', 'd', 'e']))
+
+        >>> newHdf3 = hp.Station(['01585200', '01581500'], source='usgs-dv')
         """
         # TODO: check if there is another object with the same site id.
         # TODO: check if there is any data for this site saved to disk.
         self.site = site
+        self.data = None
 
         # future:
         # define these here.
@@ -68,8 +79,21 @@ class Station(object):
         #
         # self.data = self.fetch()
 
+    def __str__(self):
+        return str(self.data)
+
+    def __repr__(self):
+        return repr(self.data)
+
+    def _repr_html_(self):
+        """return the data formatted as html in an IPython notebook.
+        """
+        if self.data is None:
+            return str(self.data)
+        return pd.DataFrame._repr_html_(self.data)
+
     def fetch(self, source='usgs-dv', start=None, end=None,
-              period=180, **kwargs):
+              period=1, **kwargs):
         """Retrieve data from a source.
 
         For now, use source as a switch to call a retrieval function. In the
@@ -79,6 +103,12 @@ class Station(object):
         Arguments
         ---------
             source: ('usgs-iv' | 'usgs-dv') the data source.
+            start: (date str) a string to represent the start date. right now,
+                this is just a string that gets passed to the usgs.
+            end: (date str) a string to represent the end date. right now,
+                this is just a string that gets passed to the usgs.
+            period: (int) number of days in the past to request data. Not
+                implemented yet.
 
         Returns
         -------
@@ -92,7 +122,10 @@ class Station(object):
         Example
         -------
 
-        >>>
+        >>> HerringRun = Station('01585200')
+        >>> HerringRun.fetch()
+        fetches the past 1 day of values.
+        
         """
         self.start = start
         self.end = end
@@ -143,28 +176,39 @@ class Station(object):
 
 
 class Analysis(object):
-    """A mega-class to combine the functionality of pandas with special
-    hydrology functions.
-
+    """holds data for multiple Stations.
     """
 
     def __init__(self, data, source=None, **kwargs):
         """
-        pass in a site name, or data.
+        Initialize with a list of sites and their source, or a dataframe.
+        
+        Arguments
+        ---------
+            data: a list of site ids
+            source: ('usgs-iv' | 'usgs-dv') the data source.
+
+        Returns
+        -------
+            self
+
+        Raises
+        ------
+            HydroSourceError: when a source that has not been implemented is
+                requested.
+
+        Example
+        -------
+
+        >>>
 
         Example:
         --------
-        >>> newDF = pd.DataFrame(np.random.randn(10, 5))
-        >>> newHdf = hp.Hydro(newDF)
 
-        >>> new_data = np.random.randn(10, 5)
-        >>> newHdf2 = hp.Hydro(new_data, columns=['a', 'b', 'c', 'd', 'e']))
-
-        >>> newHdf3 = hp.Hydro(['01585200', '01581500'], source='usgs-dv')
         """
         # self.source = source
 
-        print('newish')
+        print('new')
         if isinstance(data, list) and source is not None:
             print('A')
             if source == 'usgs-dv':

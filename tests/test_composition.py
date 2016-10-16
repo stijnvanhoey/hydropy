@@ -23,6 +23,11 @@ class TestStation(unittest.TestCase):
         expected = 'any'
         self.assertEqual(expected, actual)
 
+    @unittest.skip("Tests of _str_ and _repr_")
+    def test_Station_str_returns_str(self):
+        temp = hp.Station('any')
+        self.assertIsInstance(print(temp), str)
+
     @mock.patch('hydropy.get_usgs')
     def test_Station_fetch_accepts_source_usgs_iv(self, mock_get):
         expected = 'mock data'
