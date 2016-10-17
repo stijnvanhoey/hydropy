@@ -60,3 +60,5 @@ docs/_build/
 *.spyderworkspace
 *.cache
 .eggs/README.txt
+.spyproject/codestyle.ini
+*.ini
