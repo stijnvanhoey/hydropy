@@ -143,11 +143,13 @@ class Station(object):
         self.period = period
 
         if source == 'usgs-dv':
-            # retrieve usgs data. Save to dailymean
-            self.dailymean = hp.get_usgs(self.site, 'dv', self.start, self.end)
+            # retrieve usgs data. Save to dailymean as a HydroAnalysis object.
+            df = hp.get_usgs(self.site, 'dv', self.start, self.end)
+            self.dailymean = hp.HydroAnalysis(df)
         elif source == 'usgs-iv':
             # retrieve usgs iv data. Save to realtime.
-            self.realtime = hp.get_usgs(self.site, 'iv', self.start, self.end)
+            df = hp.get_usgs(self.site, 'iv', self.start, self.end)
+            self.realtime = hp.HydroAnalysis(df)
         else:
             raise hp.HydroSourceError('The source {0} is not defined.'
                                       .format(source))

@@ -56,6 +56,10 @@ class HydroAnalysis(object):
         datacols : None | list of str
             when None, all columns are interpreted as data column
         """
+        print("Testing inside of HydroAnalysis.__init__ line 60")
+        print(type(data))
+        print(data)
+        print("***********")
         if isinstance(data, pd.DataFrame):
             self.data = data.copy()
         else:

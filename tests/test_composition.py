@@ -41,26 +41,32 @@ class TestStation(unittest.TestCase):
         self.assertIsInstance(actual._repr_html_(), str)
         # perhaps it also makes sense to do a regex to check for proper html?
 
+    @mock.patch('hydropy.HydroAnalysis')
     @mock.patch('hydropy.get_usgs')
-    def test_Station_fetch_accepts_source_usgs_iv(self, mock_get):
+    def test_Station_fetch_accepts_source_usgs_iv(self, mock_get, mock_HA):
         expected = 'mock data'
         mock_get.return_value = expected
+        mock_HA.return_value = expected
 
         actual = hp.Station('any')
         actual.fetch(source='usgs-iv', start='A', end='B')
 
         mock_get.assert_called_once_with('any', 'iv', 'A', 'B')
+        mock_HA.assert_called_once_with(expected)
         self.assertEqual(expected, actual.realtime)
 
+    @mock.patch('hydropy.HydroAnalysis')
     @mock.patch('hydropy.get_usgs')
-    def test_Station_fetch_accepts_source_usgs_dv(self, mock_get):
+    def test_Station_fetch_accepts_source_usgs_dv(self, mock_get, mock_HA):
         expected = 'mock data'
         mock_get.return_value = expected
+        mock_HA.return_value = expected
 
         actual = hp.Station('any')
         actual.fetch(source='usgs-dv', start='A', end='B')
 
         mock_get.assert_called_once_with('any', 'dv', 'A', 'B')
+        mock_HA.assert_called_once_with(expected)
         self.assertEqual(expected, actual.dailymean)
 
     def test_Station_raises_HydroSourceError_for_bad_source(self):
