@@ -16,6 +16,7 @@ from pandas.tseries.offsets import DateOffset
 
 from .storm import selectstorms, plotstorms
 from .reading_third_party_data import load_VMM_zrx_timeserie
+from .exceptions import HydroException
 
 
 class HydroAnalysis(object):
@@ -62,7 +63,7 @@ class HydroAnalysis(object):
                 # What if the data doesn't have a copy() method?
                 self.data = pd.DataFrame(data.copy())
             except:
-                raise Exception("Input data not convertable to DataFrame.")
+                raise HydroException("Input data not convertable to DataFrame.")
 
         # Control is necessary about the time-step-information.
         if not isinstance(self.data.index, pd.DatetimeIndex):
@@ -71,7 +72,7 @@ class HydroAnalysis(object):
                 self.data.index = pd.to_datetime(self.data.index,
                                                  format=dateformatstr)
             except:
-                raise Exception("Date parsing not succeeded, \
+                raise HydroException("Date parsing not succeeded, \
                                         adapt dateformatstr-argument.")
 
         # Extract the meta-information (frequency,... and save it)
@@ -96,7 +97,7 @@ class HydroAnalysis(object):
             # check fo existence in dframe
             for colname in datacols:
                 if colname not in self.data.columns:
-                    raise Exception(colname + " no current dataframe column name")
+                    raise HydroException(colname + " no current dataframe column name")
             self._data_cols = datacols
         else:
             self._data_cols = self.data.columns
@@ -138,7 +139,7 @@ class HydroAnalysis(object):
         elif isinstance(val, list):
             for name in val:
                 if name not in self._data_cols:
-                    raise Exception("this selection not supported")
+                    raise HydroException("this selection not supported")
             return self.__class__(self.data[val].copy(), datacols=val)
         else:
             return self.__class__(self.data[val].copy(), datacols=self._data_cols)
@@ -154,10 +155,10 @@ class HydroAnalysis(object):
         if isinstance(date2test, str):
             date2test = pd.datetools.to_datetime(date2test)
         if not isinstance(date2test, datetime.datetime):
-            raise Exception("Current str or datetime object \
+            raise HydroException("Current str or datetime object \
                                                     could not be parsed.")
         if date2test < self._start_date or date2test > self._end_date:
-            raise Exception("Provided date outside date range!")
+            raise HydroException("Provided date outside date range!")
 
     @staticmethod
     def _existing_month(month):
@@ -321,7 +322,7 @@ class HydroAnalysis(object):
                 return {"Summer": "0621", "Autumn": "0921",
                         "Winter": "1221", "Spring": "0321"}
             else:
-                raise Exception("Choose between meteo or "
+                raise HydroException("Choose between meteo or "
                                 "astro defined seasons.")
         elif hemisphere == "south":
             if definition_type == "meteo":
@@ -331,10 +332,10 @@ class HydroAnalysis(object):
                 return {"Winter": "0621", "Spring": "0921",
                         "Summer": "1221", "Autumn": "0321"}
             else:
-                raise Exception("Choose between meteo or "
+                raise HydroException("Choose between meteo or "
                                 "astro defined seasons.")
         else:
-            raise Exception("Choose between north and south hemisphere")
+            raise HydroException("Choose between north and south hemisphere")
 
     def current_season_dates(self):
         """print info about current used season start dates
