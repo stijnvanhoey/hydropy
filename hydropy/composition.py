@@ -55,7 +55,11 @@ class Station(object):
         # TODO: check if there is another object with the same site id.
         # TODO: check if there is any data for this site saved to disk.
         self.site = site
+        #self.data is the default data to show for printing or other functions.
         self.data = None
+        self.dailymean = None
+        self.realtime = None
+        self.type = None
 
         # future:
         # define these here.
@@ -146,10 +150,14 @@ class Station(object):
             # retrieve usgs data. Save to dailymean as a HydroAnalysis object.
             df = hp.get_usgs(self.site, 'dv', self.start, self.end)
             self.dailymean = hp.HydroAnalysis(df)
+            self.type = 'dailymean'
+            self.data = self.dailymean
         elif source == 'usgs-iv':
             # retrieve usgs iv data. Save to realtime.
             df = hp.get_usgs(self.site, 'iv', self.start, self.end)
             self.realtime = hp.HydroAnalysis(df)
+            self.type = 'realtime'
+            self.data = self.realtime
         else:
             raise hp.HydroSourceError('The source {0} is not defined.'
                                       .format(source))
