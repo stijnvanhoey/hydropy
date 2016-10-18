@@ -224,6 +224,7 @@ class Analysis(object):
         """
         self.stations = []
         self.panel = None
+        self.source = source
 
         # Phase 1: only accept lists & source as arguments.
         #   if source:
@@ -231,7 +232,17 @@ class Analysis(object):
         #       for each item in list, make a new Station
         #       append the Station to the list.
 
-        print('new')
+        print('new Analysis object')
+        if isinstance(data, pd.Panel):
+            # TODO: Creating an Analysis object directly from a panel will
+            # cause some problems later on. Normally, an Analysis object should
+            # be created out of Station objects, which will handle saving data
+            # and handling metadata. This bypasses that functionality, so how
+            # will that functionality be included?
+            self.create_panel(data)
+            self.stations = list(self.panel.items)
+            if source is None:
+                print("please set the source for the dataset.")
         if isinstance(data, list) and source is not None:
             print('A')
             if source == 'usgs-dv' or source == 'usgs-iv':
@@ -249,10 +260,7 @@ class Analysis(object):
                                           "yet.".format(source))
         # Phase 2: dealing with a dictionary as input.
         elif isinstance(data, dict):
-        
             self.source = 'dict'
-
-
 
         print(data)
         print(source)
@@ -264,10 +272,12 @@ class Analysis(object):
 
     def create_panel(self, data):
         """create a panel from a dictionary of dataframes.
-        
+
         arguments:
         ---------
-            dict_df (dict): a dict that uses the site_id as the key, and the
+            data (pd.Panel): a pandas Panel, with each station as an item
+                holding a dataframe.
+            data (dict): a dict that uses the site_id as the key, and the
                 dataframe from that station as the value.
         returns:
         -------

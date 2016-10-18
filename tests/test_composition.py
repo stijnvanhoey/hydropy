@@ -86,9 +86,17 @@ class TestAnalysis(unittest.TestCase):
         expected = 'dict'
         self.assertEqual(expected, actual.source)
 
+    def test_Analysis_accepts_Panel(self):
+        wp = pd.Panel(np.random.randn(2, 5, 4), items=['Item1', 'Item2'],
+                      major_axis=pd.date_range('1/1/2000', periods=5),
+                      minor_axis=['A', 'B', 'C', 'D'])
+        actual = hp.Analysis(wp, source='usgs-dv')
+        self.assertListEqual(actual.stations, ['Item1', 'Item2'])
+
     def test_Analysis_raises_HydroSourceError_for_bad_source(self):
         with self.assertRaises(hp.HydroSourceError):
             actual = hp.Analysis([1, 2, 3], source='nonsense')
+            actual
 
     def test_Analysis_create_panel_raises_HydroTypeError_bad_data(self):
         with self.assertRaises(hp.HydroTypeError):
@@ -115,6 +123,6 @@ class TestAnalysis(unittest.TestCase):
         newAnalysis = hp.Analysis("valid constructor")
         df1 = pd.DataFrame(np.random.randn(5, 4))
         df2 = pd.DataFrame(np.random.randn(5, 4))
-        valid_dict_of_df = {'item1':df1, 'item2':df2}
+        valid_dict_of_df = {'item1': df1, 'item2': df2}
         actual = newAnalysis.create_panel(valid_dict_of_df)
         self.assertIsInstance(actual.panel, pd.Panel)
