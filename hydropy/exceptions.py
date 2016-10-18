@@ -76,3 +76,13 @@ class HydroSourceError(HydroException):
         raise HydroSourceError('The source {0} is not defined.'.format(source))
     """
     pass
+
+class HydroTypeError(HydroException):
+    """Raise when an unsupported type is supplied as input to a HydroPy method.
+    
+    Usage::
+
+        raise HydroTypeError("Data of type {} was supplied to a method that"
+                             only accepts type pd.Dataframe or dict"
+                             .format(type(e)))
+    """

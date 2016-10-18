@@ -45,7 +45,7 @@ from .storm import selectstorms, plotstorms
 from .flowanalysis import HydroAnalysis
 from .reading_third_party_data import get_usgs
 from .composition import Station, Analysis
-from .exceptions import HydroNoDataError, HydroSourceError
+from .exceptions import HydroNoDataError, HydroSourceError, HydroTypeError
 from .ipython import draw_map
 
 __license__ = 'BSD'

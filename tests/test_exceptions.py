@@ -19,3 +19,7 @@ class TestExceptions(unittest.TestCase):
     def test_exceptions_HydroSourceError_can_be_raised(self):
         with self.assertRaises(exceptions.HydroSourceError):
             raise exceptions.HydroSourceError("Test Error!!")
+
+    def test_exceptions_HydroTypeError_can_be_raised(self):
+        with self.assertRaises(exceptions.HydroTypeError):
+            raise exceptions.HydroTypeError("Test Error!!")
