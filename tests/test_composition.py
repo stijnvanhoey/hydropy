@@ -126,3 +126,42 @@ class TestAnalysis(unittest.TestCase):
         valid_dict_of_df = {'item1': df1, 'item2': df2}
         actual = newAnalysis.create_panel(valid_dict_of_df)
         self.assertIsInstance(actual.panel, pd.Panel)
+
+    def test_Analysis_behaviors(self):
+        pass
+        # create an analysis object with a list of valid stations and a source
+        # new_study = hp.Analysis(['01585200', '01582500'], source='usgs-dv')
+
+        # Analysis object creates new Station objects...
+        # ...and stores them internally.
+
+        # when created, new Station objects will:
+        #   record their source
+        #   keep a dataframe of data
+        #   save different types of data to different dataframes.
+        #       types: daily mean values; frequent instantaneous values; peaks
+        #   save their data to disk automatically
+        #   check for locally saved data before requesting online
+
+        # Accessing data usually occurs through analysis objects
+        # new_study.dailymean  produces a panel of dailymeans.
+        # new_study.usgs01585200.dailymean produces a df
+        # new_study.dailymean.usgs01585200 produces the same df
+
+        # You can run an analysis on an analysis object with just one command.
+        # produce a hydrograph of something (seems ambiguous!)
+        #   new_study.hydrograph()
+
+        # produces a hydrograph of all of the series combined in one graph:
+        #   new_study.dailymean.hydrograph()
+        # produce hydrographs for each of the series seperately:
+        #   new_study.dailymean.hydrographs()
+        #   or
+        #   new_study.dailymean.foreach().hydrograph()
+        # yikes! I guess foreach() would have to be a generator that spits out
+        # station objects or something...
+
+        # smart analysis: flowduration only works on daily mean by default.
+        #   new_study.flowduration()
+        # smart analysis2: extract_peaks() would only work on instantaneous val
+        # smart analysis: 
