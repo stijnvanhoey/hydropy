@@ -12,6 +12,8 @@ except ImportError:
     import mock
 import unittest
 
+import numpy as np
+import pandas as pd
 import hydropy as hp
 
 
@@ -87,3 +89,32 @@ class TestAnalysis(unittest.TestCase):
     def test_Analysis_raises_HydroSourceError_for_bad_source(self):
         with self.assertRaises(hp.HydroSourceError):
             actual = hp.Analysis([1, 2, 3], source='nonsense')
+
+    def test_Analysis_create_panel_raises_HydroTypeError_bad_data(self):
+        with self.assertRaises(hp.HydroTypeError):
+            actual = hp.Analysis("valid constructor")
+            actual.create_panel("invalid input")
+
+    def test_Analysis_create_panel_returns_Analysis_self(self):
+        newAnalysis = hp.Analysis("valid constructor")
+        wp = pd.Panel(np.random.randn(2, 5, 4), items=['Item1', 'Item2'],
+                      major_axis=pd.date_range('1/1/2000', periods=5),
+                      minor_axis=['A', 'B', 'C', 'D'])
+        actual = newAnalysis.create_panel(wp)
+        self.assertIs(newAnalysis, actual)
+
+    def test_Analysis_create_panel_accepts_panels(self):
+        newAnalysis = hp.Analysis("valid constructor")
+        wp = pd.Panel(np.random.randn(2, 5, 4), items=['Item1', 'Item2'],
+                      major_axis=pd.date_range('1/1/2000', periods=5),
+                      minor_axis=['A', 'B', 'C', 'D'])
+        actual = newAnalysis.create_panel(wp)
+        self.assertIsInstance(actual.panel, pd.Panel)
+
+    def test_Analysis_create_panel_accepts_dict_of_df(self):
+        newAnalysis = hp.Analysis("valid constructor")
+        df1 = pd.DataFrame(np.random.randn(5, 4))
+        df2 = pd.DataFrame(np.random.randn(5, 4))
+        valid_dict_of_df = {'item1':df1, 'item2':df2}
+        actual = newAnalysis.create_panel(valid_dict_of_df)
+        self.assertIsInstance(actual.panel, pd.Panel)

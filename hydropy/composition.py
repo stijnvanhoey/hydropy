@@ -223,6 +223,7 @@ class Analysis(object):
 
         """
         self.stations = []
+        self.panel = None
 
         # Phase 1: only accept lists & source as arguments.
         #   if source:
@@ -260,3 +261,24 @@ class Analysis(object):
         # If data is passed, like a dict of series, or df
         # self.df = pd.DataFrame(data)
         # accepts data, then index=, columns=,
+
+    def create_panel(self, data):
+        """create a panel from a dictionary of dataframes.
+        
+        arguments:
+        ---------
+            dict_df (dict): a dict that uses the site_id as the key, and the
+                dataframe from that station as the value.
+        returns:
+        -------
+            self
+        """
+        if isinstance(data, pd.Panel):
+            self.panel = data
+        elif isinstance(data, dict):
+            self.panel = pd.Panel(data)
+        else:
+            raise hp.HydroTypeError("Data of type {0} was supplied to a method"
+                                 " that only accepts type pd.Dataframe or dict"
+                                 .format(type(data)))
+        return self
