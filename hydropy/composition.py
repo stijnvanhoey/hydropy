@@ -232,7 +232,7 @@ class Analysis(object):
         #       for each item in list, make a new Station
         #       append the Station to the list.
 
-        print('new Analysis object')
+        # print('new Analysis object')
         if isinstance(data, pd.Panel):
             # TODO: Creating an Analysis object directly from a panel will
             # cause some problems later on. Normally, an Analysis object should
@@ -244,17 +244,17 @@ class Analysis(object):
             if source is None:
                 print("please set the source for the dataset.")
         if isinstance(data, list) and source is not None:
-            print('A')
+            #print('A')
             if source == 'usgs-dv' or source == 'usgs-iv':
                 self.source = source
-                print('B')
+                #print('B')
                 for site in data:
                     new_station = hp.Station(site)
                     new_station.source = source
                     # call new_station.fetch(site, source, start=start, end=end)
                     self.stations.append(new_station)
             else:
-                print('D')
+                #print('D')
                 # Raise an error if an unknown source is given.
                 raise hp.HydroSourceError("The {0} service is not implemented"
                                           "yet.".format(source))
@@ -262,9 +262,9 @@ class Analysis(object):
         elif isinstance(data, dict):
             self.source = 'dict'
 
-        print(data)
-        print(source)
-        print(kwargs)
+        # print(data)
+        # print(source)
+        # print(kwargs)
 
         # If data is passed, like a dict of series, or df
         # self.df = pd.DataFrame(data)
