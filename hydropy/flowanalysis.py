@@ -56,10 +56,6 @@ class HydroAnalysis(object):
         datacols : None | list of str
             when None, all columns are interpreted as data column
         """
-        print("Testing inside of HydroAnalysis.__init__ line 60")
-        print(type(data))
-        print(data)
-        print("***********")
         if isinstance(data, pd.DataFrame):
             self.data = data.copy()
         else:
@@ -129,8 +125,18 @@ class HydroAnalysis(object):
         message += '\n ranging from ' + \
             self._start_date.strftime("%H:%M:%S %d/%m/%Y") + \
             ' until ' + self._end_date.strftime("%H:%M:%S %d/%m/%Y")
-        message += '\n with frequency ' + self.data.index.freqstr
+        if self.data.index.freqstr is None:
+            message += '\n with only one value.'
+        else:
+            message += '\n with frequency ' + self.data.index.freqstr
         return message
+
+#    def _repr_html_(self):
+        """return the data formatted as html in an IPython notebook.
+        """
+#        if self.data is None:
+#            return "No data for this Station"
+#        return pd.DataFrame._repr_html_(self.data)
 
     def __getitem__(self, val):
         """returns the class object itself with the selected values

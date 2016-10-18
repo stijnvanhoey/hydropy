@@ -93,8 +93,8 @@ class Station(object):
         """return the data formatted as html in an IPython notebook.
         """
         if self.data is None:
-            return str(self.data)
-        return pd.DataFrame._repr_html_(self.data)
+            return "No data for this Station"
+        return pd.DataFrame._repr_html_(self.data.data)
 
     def fetch(self, source='usgs-dv', start=None, end=None,
               period=1, **kwargs):
