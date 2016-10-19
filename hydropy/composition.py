@@ -100,7 +100,7 @@ class Station(object):
             # I don't know what this is.
             guess = None
         return guess
-
+    """
     def __str__(self):
         return str(self.data)
 
@@ -108,12 +108,12 @@ class Station(object):
         return repr(self.data)
 
     def _repr_html_(self):
-        """return the data formatted as html in an IPython notebook.
-        """
-        if self.data is None:
-            return "No data for this Station"
-        return pd.DataFrame._repr_html_(self.data.data)
-
+    #    """  # return the data formatted as html in an IPython notebook.
+    #    """
+    #    if self.data is None:
+    #        return "No data for this Station"
+    #    return pd.DataFrame._repr_html_(self.data.data)
+    # """
     def fetch(self, source=None, start=None, end=None,
               period=1, **kwargs):
         """Retrieve data from a source.
@@ -201,7 +201,7 @@ class Station(object):
             self.source = source
         else:
             raise hp.HydroSourceError('The source {0} is not defined.'
-                                          .format(source))
+                                      .format(source))
 
         return self
 
@@ -241,7 +241,8 @@ class Analysis(object):
     """holds data for multiple Stations.
     """
 
-    def __init__(self, data, source=None, **kwargs):
+    def __init__(self, data, source=None, start=None,
+                 end=None, period=None, **kwargs):
         """
         Initialize with a list of sites and their source, or a dataframe.
 
@@ -273,17 +274,13 @@ class Analysis(object):
         >>> study2 = hp.Analysis(sites)
 
         """
-        self.stations = []
+        self.station_list = []
+        self.df_dict = {}
         self.panel = None
-        #self.source = source
+        self.start = start
+        self.end = end
+        self.period = period
 
-        # Phase 1: only accept lists & source as arguments.
-        #   if source:
-        #       categorize source;
-        #       for each item in list, make a new Station
-        #       append the Station to the list.
-
-        # print('new Analysis object')
         if isinstance(data, pd.Panel):
             # TODO: Creating an Analysis object directly from a panel will
             # cause some problems later on. Normally, an Analysis object should
@@ -294,32 +291,21 @@ class Analysis(object):
             self.stations = list(self.panel.items)
             if source is None:
                 print("please set the source for the dataset.")
-        if isinstance(data, list) and source is not None:
-            #print('A')
+        elif isinstance(data, list) and source is not None:
             if source == 'usgs-dv' or source == 'usgs-iv':
-                #self.source = source
-                #print('B')
                 for site in data:
-                    new_station = hp.Station(site)
-                    new_station.source = source
+                    new_station = hp.Station(site, source=source).fetch()
+                    self.df_dict[site] = new_station.data.data
                     # call new_station.fetch(site, source, start=start, end=end)
-                    self.stations.append(new_station)
+                    self.station_list.append(new_station)
+                self.create_panel(self.df_dict)
             else:
-                #print('D')
                 # Raise an error if an unknown source is given.
                 raise hp.HydroSourceError("The {0} service is not implemented"
                                           "yet.".format(source))
         # Phase 2: dealing with a dictionary as input.
         elif isinstance(data, dict):
             self.source = 'dict'
-
-        # print(data)
-        # print(source)
-        # print(kwargs)
-
-        # If data is passed, like a dict of series, or df
-        # self.df = pd.DataFrame(data)
-        # accepts data, then index=, columns=,
 
     def create_panel(self, data):
         """create a panel from a dictionary of dataframes.

@@ -44,6 +44,7 @@ class TestStation(unittest.TestCase):
         actual = hp.Station('any')
         self.assertIsInstance(actual.__repr__(), str)
 
+    @unittest.skip("Removed _html_repr_ for Station. Do I want one?")
     def test_Station_htmlrepr_returns_html(self):
         actual = hp.Station('any')
         # IPython will take advantage of this function if it exists; The
@@ -86,20 +87,20 @@ class TestAnalysis(unittest.TestCase):
     def test_Analysis_accepts_usgsdv_list(self):
         actual = hp.Analysis(['usgs01585200', 'usgs01581500'], source='usgs-dv')
         # Check that actual changes Stations from None to a list.
-        self.assertIsNotNone(actual.stations)
-        self.assertIsInstance(actual.stations, list)
+        self.assertIsNotNone(actual.station_list)
+        self.assertIsInstance(actual.station_list, list)
         # Check that each element of the list is a Station.
-        self.assertEqual(len(actual.stations), 2)
-        self.assertIsInstance(actual.stations[0], hp.Station)
+        self.assertEqual(len(actual.station_list), 2)
+        self.assertIsInstance(actual.station_list[0], hp.Station)
 
     def test_Analysis_accepts_usgsiv_list(self):
         actual = hp.Analysis(['usgs01585200', 'usgs01581500'], source='usgs-iv')
         # Check that actual changes Stations from None to a list.
-        self.assertIsNotNone(actual.stations)
-        self.assertIsInstance(actual.stations, list)
+        self.assertIsNotNone(actual.station_list)
+        self.assertIsInstance(actual.station_list, list)
         # Check that each element of the list is a Station.
-        self.assertEqual(len(actual.stations), 2)
-        self.assertIsInstance(actual.stations[0], hp.Station)
+        self.assertEqual(len(actual.station_list), 2)
+        self.assertIsInstance(actual.station_list[0], hp.Station)
 
     def test_Analysis_accepts_dict(self):
         actual = hp.Analysis({'blah': 'blah'})
