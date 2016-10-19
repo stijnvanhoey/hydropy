@@ -24,6 +24,16 @@ class TestStation(unittest.TestCase):
         expected = 'any'
         self.assertEqual(expected, actual.site)
 
+    def test_Station_raises_HydroSourceError_no_source(self):
+        actual = hp.Station('any')
+        with self.assertRaises(hp.HydroSourceError):
+            actual.fetch()
+
+    def test_Station_raises_HydroSourceError_for_bad_source(self):
+        with self.assertRaises(hp.HydroSourceError):
+            actual = hp.Station("any")
+            actual.fetch(source='nonsense')
+
     def test_Station_str_returns_str(self):
         actual = hp.Station('any')
         # This might be a dumb test, because I think an error gets thrown if
@@ -69,10 +79,6 @@ class TestStation(unittest.TestCase):
         mock_HA.assert_called_once_with(expected)
         self.assertEqual(expected, actual.dailymean)
 
-    def test_Station_raises_HydroSourceError_for_bad_source(self):
-        with self.assertRaises(hp.HydroSourceError):
-            actual = hp.Station("any")
-            actual.fetch(source='nonsense')
 
 
 class TestAnalysis(unittest.TestCase):

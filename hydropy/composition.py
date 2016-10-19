@@ -37,7 +37,7 @@ class Station(object):
     for the instantaneous values.
     """
 
-    def __init__(self, site, source='usgs-dv', start=None, end=None, period=10):
+    def __init__(self, site, source=None, start=None, end=None, period=10):
         """Initialize the Station object by giving it an id that is derived
         from the id of the physical station site that is collecting the data.
         Save the **kwargs to the Station object.
@@ -45,17 +45,21 @@ class Station(object):
         Example (future usage):
         -----------------------
         >>> newDF = pd.DataFrame(np.random.randn(10, 5))
-        >>> newHdf = hp.Station(newDF)
+        >>> newStation = hp.Station(newDF)
 
         >>> new_data = np.random.randn(10, 5)
-        >>> newHdf2 = hp.Station(new_data, columns=['a', 'b', 'c', 'd', 'e']))
+        >>> newStation2 = hp.Station(new_data, columns=['a', 'b', 'c', 'd', 'e']))
 
-        >>> newHdf3 = hp.Station(['usgs01585200', 'usgs01581500'], source='usgs-dv')
+        >>> newStation3 = hp.Station(['usgs01585200', 'usgs01581500'], source='usgs-dv')
         """
         # TODO: check if there is another object with the same site id.
         # TODO: check if there is any data for this site saved to disk.
         self.site = site
-        self.source = source
+        
+        if source is None:
+            self.source = self._guess_the_source_from_site(site)
+        else:
+            self.source = source
         self.start = start
         self.end = end
         self.period = period
@@ -86,6 +90,16 @@ class Station(object):
         #                        .format(source))
         #
         # self.data = self.fetch()
+
+    def _guess_the_source_from_site(self, sitename):
+        if sitename[0:4] == 'usgs':
+            guess = 'usgs-dv'
+        elif sitename[:-1] == 'L':
+            guess = 'vmm'
+        else:
+            # I don't know what this is.
+            guess = None
+        return guess
 
     def __str__(self):
         return str(self.data)
@@ -160,6 +174,15 @@ class Station(object):
             self.end = end
         if period is not None:
             self.period = period
+
+        if source is None:
+            if self.source is None:
+                raise hp.HydroSourceError("No source was defined for this "
+                                          ".fetch() request. To set a source, "
+                                          "use .fetch(source='usgs-iv') or "
+                                          "another source, such as 'usgs-dv'.")
+            else:
+                source = self.source
         if source == 'usgs-dv':
             # retrieve usgs data. Save to dailymean as a HydroAnalysis object.
             usgs_id = self.site[4:]
@@ -167,6 +190,7 @@ class Station(object):
             self.dailymean = hp.HydroAnalysis(df)
             self.type = 'dailymean'
             self.data = self.dailymean
+            self.source = source
         elif source == 'usgs-iv':
             # retrieve usgs iv data. Save to realtime.
             usgs_id = self.site[4:]
@@ -174,9 +198,10 @@ class Station(object):
             self.realtime = hp.HydroAnalysis(df)
             self.type = 'realtime'
             self.data = self.realtime
+            self.source = source
         else:
             raise hp.HydroSourceError('The source {0} is not defined.'
-                                      .format(source))
+                                          .format(source))
 
         return self
 
