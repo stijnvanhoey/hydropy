@@ -48,10 +48,10 @@ class TestStation(unittest.TestCase):
         mock_get.return_value = expected
         mock_HA.return_value = expected
 
-        actual = hp.Station('any')
+        actual = hp.Station('usgs01585200')
         actual.fetch(source='usgs-iv', start='A', end='B')
 
-        mock_get.assert_called_once_with('any', 'iv', 'A', 'B')
+        mock_get.assert_called_once_with('01585200', 'iv', 'A', 'B')
         mock_HA.assert_called_once_with(expected)
         self.assertEqual(expected, actual.realtime)
 
@@ -62,10 +62,10 @@ class TestStation(unittest.TestCase):
         mock_get.return_value = expected
         mock_HA.return_value = expected
 
-        actual = hp.Station('any')
+        actual = hp.Station('usgs01585200')
         actual.fetch(source='usgs-dv', start='A', end='B')
 
-        mock_get.assert_called_once_with('any', 'dv', 'A', 'B')
+        mock_get.assert_called_once_with('01585200', 'dv', 'A', 'B')
         mock_HA.assert_called_once_with(expected)
         self.assertEqual(expected, actual.dailymean)
 
@@ -78,14 +78,22 @@ class TestStation(unittest.TestCase):
 class TestAnalysis(unittest.TestCase):
 
     def test_Analysis_accepts_usgsdv_list(self):
-        actual = hp.Analysis(['01585200', '01581500'], source='usgs-dv')
-        expected = 'usgs-dv'
-        self.assertEqual(expected, actual.source)
+        actual = hp.Analysis(['usgs01585200', 'usgs01581500'], source='usgs-dv')
+        # Check that actual changes Stations from None to a list.
+        self.assertIsNotNone(actual.stations)
+        self.assertIsInstance(actual.stations, list)
+        # Check that each element of the list is a Station.
+        self.assertEqual(len(actual.stations), 2)
+        self.assertIsInstance(actual.stations[0], hp.Station)
 
     def test_Analysis_accepts_usgsiv_list(self):
-        actual = hp.Analysis(['01585200', '01581500'], source='usgs-iv')
-        expected = 'usgs-iv'
-        self.assertEqual(expected, actual.source)
+        actual = hp.Analysis(['usgs01585200', 'usgs01581500'], source='usgs-iv')
+        # Check that actual changes Stations from None to a list.
+        self.assertIsNotNone(actual.stations)
+        self.assertIsInstance(actual.stations, list)
+        # Check that each element of the list is a Station.
+        self.assertEqual(len(actual.stations), 2)
+        self.assertIsInstance(actual.stations[0], hp.Station)
 
     def test_Analysis_accepts_dict(self):
         actual = hp.Analysis({'blah': 'blah'})

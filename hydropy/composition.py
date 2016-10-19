@@ -37,11 +37,11 @@ class Station(object):
     for the instantaneous values.
     """
 
-    def __init__(self, site):
+    def __init__(self, site, source='usgs-dv', start=None, end=None, period=10):
         """Initialize the Station object by giving it an id that is derived
         from the id of the physical station site that is collecting the data.
         Save the **kwargs to the Station object.
-        
+
         Example (future usage):
         -----------------------
         >>> newDF = pd.DataFrame(np.random.randn(10, 5))
@@ -50,11 +50,15 @@ class Station(object):
         >>> new_data = np.random.randn(10, 5)
         >>> newHdf2 = hp.Station(new_data, columns=['a', 'b', 'c', 'd', 'e']))
 
-        >>> newHdf3 = hp.Station(['01585200', '01581500'], source='usgs-dv')
+        >>> newHdf3 = hp.Station(['usgs01585200', 'usgs01581500'], source='usgs-dv')
         """
         # TODO: check if there is another object with the same site id.
         # TODO: check if there is any data for this site saved to disk.
         self.site = site
+        self.source = source
+        self.start = start
+        self.end = end
+        self.period = period
         #self.data is the default data to show for printing or other functions.
         self.data = None
         self.dailymean = None
@@ -96,7 +100,7 @@ class Station(object):
             return "No data for this Station"
         return pd.DataFrame._repr_html_(self.data.data)
 
-    def fetch(self, source='usgs-dv', start=None, end=None,
+    def fetch(self, source=None, start=None, end=None,
               period=1, **kwargs):
         """Retrieve data from a source.
 
@@ -142,19 +146,31 @@ class Station(object):
         Fetches instantaneous values with a collection interval of 15 minutes
         for June 1-4, 2014.
         """
-        self.start = start
-        self.end = end
-        self.period = period
-
+        # Update the dates if they haven't already been set.
+        # TODO: check if the new fetch dates extend the record.
+        # Does the new period cover more recent time than self.end?
+        # Does the new period reach back earlier than self.start?
+        # Is the new end more recent than self.end?
+        # Is the new start earlier than self.start?
+        #
+        # For now, change the dates if they are included.
+        if start is not None:
+            self.start = start
+        if end is not None:
+            self.end = end
+        if period is not None:
+            self.period = period
         if source == 'usgs-dv':
             # retrieve usgs data. Save to dailymean as a HydroAnalysis object.
-            df = hp.get_usgs(self.site, 'dv', self.start, self.end)
+            usgs_id = self.site[4:]
+            df = hp.get_usgs(usgs_id, 'dv', self.start, self.end)
             self.dailymean = hp.HydroAnalysis(df)
             self.type = 'dailymean'
             self.data = self.dailymean
         elif source == 'usgs-iv':
             # retrieve usgs iv data. Save to realtime.
-            df = hp.get_usgs(self.site, 'iv', self.start, self.end)
+            usgs_id = self.site[4:]
+            df = hp.get_usgs(usgs_id, 'iv', self.start, self.end)
             self.realtime = hp.HydroAnalysis(df)
             self.type = 'realtime'
             self.data = self.realtime
@@ -234,7 +250,7 @@ class Analysis(object):
         """
         self.stations = []
         self.panel = None
-        self.source = source
+        #self.source = source
 
         # Phase 1: only accept lists & source as arguments.
         #   if source:
@@ -256,7 +272,7 @@ class Analysis(object):
         if isinstance(data, list) and source is not None:
             #print('A')
             if source == 'usgs-dv' or source == 'usgs-iv':
-                self.source = source
+                #self.source = source
                 #print('B')
                 for site in data:
                     new_station = hp.Station(site)
