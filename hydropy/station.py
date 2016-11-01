@@ -19,6 +19,21 @@ class Station(object):
         from a source. Later, add logic that allows these functions to be
         called from inside the __init__().
 
+    TODO: Behavior:
+        Initialize with as little as a site ID.
+        INIT will check for saved files for this site
+            if a file exists, it will return with a description of what data
+            exists in the file: dailymean, realtime, start, end
+        INIT will check if a start or end parameter has been specified, and
+            will request additional data if start is earlier or end is later
+            than what might be in the datafile.
+        If no start, end, or period set, init will finish.
+            Maybe provide a warning that no date selected?
+            
+        Whenever data is requested, it gets added to whatever already exists
+            and saved to disk.
+        
+
     Different types of data get held in different dataframes. Daily mean
     discharge is separated from 15 minute instantaneous data and peak
     instantaneous data. Each series can have derived series that share the same

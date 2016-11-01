@@ -13,6 +13,31 @@ import hydropy as hp
 
 class Analysis(object):
     """holds data for multiple Stations.
+
+    TODO: Structure
+        * a start date
+        * an end date
+        * at least one Station object
+        * a dailymean panel
+        * a realtime panel
+          TODO: a peak discharge panel
+        * panel structure:
+            * axis 0 (items): Each item is a dataframe for a site.
+            * axis 1 (major_axis / index / rows): uses a datetime index.
+            * axis 2 (minor_axis / columns): each column represents a different
+                kind of value. the first is Q, or discharge, also Qbf,
+                Qquickflow, precip...
+          TODO: a site analysis dataframe. Each row is a site, each column
+              is some watershed variable or global variable...
+
+    TODO: Behavior
+        * Can init with as little as a list of sites.
+            * distant future TODO: init with no sites, select from map or list
+        * If no start or end specified, and no data exists, then a warning is
+            printed.
+        * __init__() creates new Stations (these do most of the work)
+        * data from Stations gets pulled out into panels for further analysis.
+        * all work takes place on the panels.
     """
 
     def __init__(self, data, source=None, start=None,
