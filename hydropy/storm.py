@@ -58,6 +58,7 @@ def selectstorms(flowserie, rainserie, number_of_storms=3,
     # sort the whole array
     try:
         temp = temp.sort(temp.columns.tolist(), ascending=False)
+    # TODO: set a specific exception to react to.
     except:
         temp.sort(ascending=False)
 
@@ -131,12 +132,12 @@ def selectstorms(flowserie, rainserie, number_of_storms=3,
     return selstorms
 
 
-def _control_dayhour(Timestamp):
+def _control_dayhour(timestamp):
     """pd.TimeStamp -> int
 
     Help function for editing the date representation of the plots
     """
-    if Timestamp.hour == 0 and Timestamp.minute == 0:
+    if timestamp.hour == 0 and timestamp.minute == 0:
         return 0
     else:
         return 1
@@ -243,10 +244,9 @@ def plotstorms(flowserie, rainserie, selected_storm,
         ax1.xaxis.set_minor_locator(mpl.dates.DayLocator())
         ax1.xaxis.set_minor_formatter(mpl.dates.DateFormatter('%d'))
         ax1.xaxis.set_major_locator(mpl.dates.MonthLocator(bymonthday=
-                                    [1, storm['startdate'].day + \
+                                    [1, storm['startdate'].day +
                                     _control_dayhour(storm['startdate'])]))
-        ax1.xaxis.set_major_formatter(
-                mpl.dates.DateFormatter('\n %b %Y'))
+        ax1.xaxis.set_major_formatter(mpl.dates.DateFormatter('\n %b %Y'))
 
         # Add the labels of the different flows
         if j == 0:

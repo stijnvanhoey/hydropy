@@ -91,7 +91,7 @@ class Station(object):
         # self.data = self.fetch()
 
     @staticmethod
-    def _guess_the_source_from_site(self, sitename):
+    def _guess_the_source_from_site(sitename):
         if sitename[0:4] == 'usgs':
             guess = 'usgs-dv'
         elif sitename[:-1] == 'L':

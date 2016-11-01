@@ -91,16 +91,22 @@ def draw_map(width=700, height=400):
 # excellent __str__() functions.  Inject like this::
 # self.__str__ = hydro_df_to_str
 def hydro_df_to_str(self):
+    """Use Pandas __str__() function.
+    """
     return str(self.data)
 
 
 def hydro_df_to_repr(self):
+    """Use Pandas __repr__() function.
+    """
     return repr(self.data)
 
 
 def hydro_df_to_repr_html(self):
-        """return the data formatted as html in an IPython notebook.
-        """
-        if self.data is None:
-            return str(self.data)
-        return pd.DataFrame._repr_html_(self.data)
+    """return the data formatted as html in an IPython notebook.
+    """
+    if self.data is None:
+        return str(self.data)
+    # should the following be
+    # return self.data._repr_html_()  ?
+    return pd.DataFrame._repr_html_(self.data)

@@ -160,9 +160,9 @@ def load_CEH_timeserie(filename):
     data : pd.DataFrame
         pd.DataFrame of the VMM data
     """
-    parse = lambda y,m,d,h: datetime.datetime(int(y), int(m), int(d),
-                                              _minutes2hours(int(h))[0],
-                                              _minutes2hours(int(h))[1])
+    parse = lambda y, m, d, h: datetime.datetime(int(y), int(m), int(d),
+                                                 _minutes2hours(int(h))[0],
+                                                 _minutes2hours(int(h))[1])
     ceh_data = pd.read_csv(filename, sep=',',
                            parse_dates={"Datetime": [1, 2, 3, 4]},
                            date_parser=parse,

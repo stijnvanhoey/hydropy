@@ -132,8 +132,8 @@ class HydroAnalysis(object):
         return message
 
 #    def _repr_html_(self):
-        """return the data formatted as html in an IPython notebook.
-        """
+#        """return the data formatted as html in an IPython notebook.
+#        """
 #        if self.data is None:
 #            return "No data for this Station"
 #        return pd.DataFrame._repr_html_(self.data)
@@ -187,9 +187,9 @@ class HydroAnalysis(object):
         elif isinstance(month, str):
             month = month.capitalize()
             if month in calendar.month_abbr:
-                    monthsel = mabbr_dict[month]
+                monthsel = mabbr_dict[month]
             elif month in calendar.month_name:
-                    monthsel = mname_dict[month]
+                monthsel = mname_dict[month]
             else:
                 raise calendar.IllegalMonthError(month)
         return monthsel
@@ -333,7 +333,7 @@ class HydroAnalysis(object):
                         "Winter": "1221", "Spring": "0321"}
             else:
                 raise HydroException("Choose between meteo or "
-                                "astro defined seasons.")
+                                     "astro defined seasons.")
         elif hemisphere == "south":
             if definition_type == "meteo":
                 return {"Winter": "0601", "Spring": "0901",
@@ -343,7 +343,7 @@ class HydroAnalysis(object):
                         "Summer": "1221", "Autumn": "0321"}
             else:
                 raise HydroException("Choose between meteo or "
-                                "astro defined seasons.")
+                                     "astro defined seasons.")
         else:
             raise HydroException("Choose between north and south hemisphere")
 
@@ -543,7 +543,7 @@ class HydroAnalysis(object):
         # building dummy matrix for element selection of dframe
         temp1 = np.zeros_like(peakrows.values)
         for i, j in zip(rev_ind, selected_peaks[1]):
-                temp1[i, j] = 1.
+            temp1[i, j] = 1.
         high_peaks = temp1 * peakrows
         high_peaks[high_peaks == 0] = np.nan
 
@@ -581,7 +581,7 @@ class HydroAnalysis(object):
         # building dummy matrix for element selection of dframe
         temp1 = np.zeros_like(peakrows.values)
         for i, j in zip(rev_ind, selected_peaks[1]):
-                temp1[i, j] = 1.
+            temp1[i, j] = 1.
         low_peaks = temp1 * peakrows
         low_peaks[low_peaks == 0] = np.nan
 
@@ -608,7 +608,9 @@ class HydroAnalysis(object):
         return storms
 
 # %%
+    @staticmethod
     def _control_extra_serie(self):
+        # TODO
         """check if extra time serie fits with the current dataset
         """
         return False
