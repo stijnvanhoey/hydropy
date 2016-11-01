@@ -90,6 +90,7 @@ class Station(object):
         #
         # self.data = self.fetch()
 
+    @staticmethod
     def _guess_the_source_from_site(self, sitename):
         if sitename[0:4] == 'usgs':
             guess = 'usgs-dv'
@@ -99,20 +100,7 @@ class Station(object):
             # I don't know what this is.
             guess = None
         return guess
-    """
-    def __str__(self):
-        return str(self.data)
 
-    def __repr__(self):
-        return repr(self.data)
-
-    def _repr_html_(self):
-    #    """  # return the data formatted as html in an IPython notebook.
-    #    """
-    #    if self.data is None:
-    #        return "No data for this Station"
-    #    return pd.DataFrame._repr_html_(self.data.data)
-    # """
     def fetch(self, source=None, start=None, end=None,
               period=1, **kwargs):
         """Retrieve data from a source.

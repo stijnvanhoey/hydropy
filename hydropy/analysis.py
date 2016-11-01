@@ -6,7 +6,6 @@ Created on Tue Oct 11 22:09:11 2016
 """
 
 from __future__ import absolute_import, print_function
-import numpy as np
 import pandas as pd
 
 import hydropy as hp
@@ -101,6 +100,7 @@ class Analysis(object):
             self.panel = pd.Panel(data)
         else:
             raise hp.HydroTypeError("Data of type {0} was supplied to a method"
-                                 " that only accepts type pd.Dataframe or dict"
-                                 .format(type(data)))
+                                    " that only accepts type pd.Dataframe or"
+                                    " dict."
+                                    .format(type(data)))
         return self
