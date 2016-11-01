@@ -44,7 +44,8 @@ from .baseflow import (get_baseflow_chapman,
 from .storm import selectstorms, plotstorms
 from .flowanalysis import HydroAnalysis
 from .reading_third_party_data import get_usgs
-from .composition import Station, Analysis
+from .analysis import Analysis
+from .station import Station
 from .exceptions import HydroNoDataError, HydroSourceError, HydroTypeError
 from .ipython import draw_map
 

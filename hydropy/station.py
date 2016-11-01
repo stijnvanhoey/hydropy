@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct 11 22:09:11 2016
+station.py
 
-@author: Marty
+This module defines the Station class and its methods. test_station.py tests
+this module.
 """
-
 from __future__ import absolute_import, print_function
-import numpy as np
 import pandas as pd
 
 import hydropy as hp
@@ -55,7 +54,7 @@ class Station(object):
         # TODO: check if there is another object with the same site id.
         # TODO: check if there is any data for this site saved to disk.
         self.site = site
-        
+
         if source is None:
             self.source = self._guess_the_source_from_site(site)
         else:
@@ -63,7 +62,7 @@ class Station(object):
         self.start = start
         self.end = end
         self.period = period
-        #self.data is the default data to show for printing or other functions.
+        # self.data is the default data to show for printing or other functions
         self.data = None
         self.dailymean = None
         self.realtime = None
@@ -235,97 +234,3 @@ class Station(object):
             # try:  #Maybe don't catch this error? is the message good enough?
             # Pandas accepts
             pass
-
-
-class Analysis(object):
-    """holds data for multiple Stations.
-    """
-
-    def __init__(self, data, source=None, start=None,
-                 end=None, period=None, **kwargs):
-        """
-        Initialize with a list of sites and their source, or a dataframe.
-
-        Arguments
-        ---------
-            data: a list of site ids
-            source: ('usgs-iv' | 'usgs-dv') the data source.
-
-        Returns
-        -------
-            self
-
-        Raises
-        ------
-            HydroSourceError: when a source that has not been implemented is
-                requested.
-
-        Example
-        -------
-        Create a new Analysis object by passing a list of sites and a source:
-
-        >>> my_study = hp.Analysis(['01585200', '01582500'], source='usgs-dv')
-
-        Create a new Analysis object by passing a list of dictionaries that
-        specify the site id and the data source:
-
-        >>> sites = [{site: '01585200', source: 'usgs-dv'},
-                     {site: '01582500', source: 'usgs-iv'}]
-        >>> study2 = hp.Analysis(sites)
-
-        """
-        self.station_list = []
-        self.df_dict = {}
-        self.panel = None
-        self.start = start
-        self.end = end
-        self.period = period
-
-        if isinstance(data, pd.Panel):
-            # TODO: Creating an Analysis object directly from a panel will
-            # cause some problems later on. Normally, an Analysis object should
-            # be created out of Station objects, which will handle saving data
-            # and handling metadata. This bypasses that functionality, so how
-            # will that functionality be included?
-            self.create_panel(data)
-            self.stations = list(self.panel.items)
-            if source is None:
-                print("please set the source for the dataset.")
-        elif isinstance(data, list) and source is not None:
-            if source == 'usgs-dv' or source == 'usgs-iv':
-                for site in data:
-                    new_station = hp.Station(site, source=source).fetch()
-                    self.df_dict[site] = new_station.data.data
-                    # call new_station.fetch(site, source, start=start, end=end)
-                    self.station_list.append(new_station)
-                self.create_panel(self.df_dict)
-            else:
-                # Raise an error if an unknown source is given.
-                raise hp.HydroSourceError("The {0} service is not implemented"
-                                          "yet.".format(source))
-        # Phase 2: dealing with a dictionary as input.
-        elif isinstance(data, dict):
-            self.source = 'dict'
-
-    def create_panel(self, data):
-        """create a panel from a dictionary of dataframes.
-
-        arguments:
-        ---------
-            data (pd.Panel): a pandas Panel, with each station as an item
-                holding a dataframe.
-            data (dict): a dict that uses the site_id as the key, and the
-                dataframe from that station as the value.
-        returns:
-        -------
-            self
-        """
-        if isinstance(data, pd.Panel):
-            self.panel = data
-        elif isinstance(data, dict):
-            self.panel = pd.Panel(data)
-        else:
-            raise hp.HydroTypeError("Data of type {0} was supplied to a method"
-                                 " that only accepts type pd.Dataframe or dict"
-                                 .format(type(data)))
-        return self
