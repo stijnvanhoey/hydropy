@@ -51,10 +51,15 @@ class Station(object):
     for the instantaneous values.
     """
 
-    def __init__(self, site, source=None, start=None, end=None, period=10):
+    def __init__(self, site, source=None, series=None,
+                 start=None, end=None, period=None):
         """Initialize the Station object by giving it an id that is derived
         from the id of the physical station site that is collecting the data.
         Save the **kwargs to the Station object.
+
+        Example:
+        --------
+        >>> new_station = hp.Station('usgs01585200')
 
         Example (future usage):
         -----------------------
@@ -64,59 +69,25 @@ class Station(object):
         >>> new_data = np.random.randn(10, 5)
         >>> newStation2 = hp.Station(new_data, columns=['a', 'b', 'c', 'd', 'e']))
 
-        >>> newStation3 = hp.Station(['usgs01585200', 'usgs01581500'], source='usgs-dv')
+        >>> newStation3 = hp.Station(['usgs01585200', 'usgs01581500'])
         """
         # TODO: check if there is another object with the same site id.
         # TODO: check if there is any data for this site saved to disk.
-        self.site = site
 
-        if source is None:
-            self.source = self._guess_the_source_from_site(site)
+        self.site, self.source = hp.reading_third_party_data.site_parser(site)
+
+        if series is None:
+            self.series = 'dailymean'
         else:
-            self.source = source
+            self.series = series
+
         self.start = start
         self.end = end
         self.period = period
-        # self.data is the default data to show for printing or other functions
-        self.data = None
         self.dailymean = None
         self.realtime = None
-        self.type = None
 
-        # future:
-        # define these here.
-        # self.site = site
-        # self.source = source
-        # self.start = start
-        # self.end = end
-
-        # future: pass the fetch function in at initialization.
-        # if kwargs.get('fetch'):
-        #    self.fetch = fetch
-        # elif self.source == 'usgs-iv':
-        #    self.fetch = get_usgs(self.site, 'iv', self.start, self.end)
-        # elfi self.source == 'usgs-dv':
-        #    self.fetch = get_usgs(self.site, 'dv', self.start, self.end)
-        # elif self.source is None:
-        #   print('Must set source')
-        # else:
-        #   raise HydroNameError('The source {0} is not defined.'
-        #                        .format(source))
-        #
-        # self.data = self.fetch()
-
-    @staticmethod
-    def _guess_the_source_from_site(sitename):
-        if sitename[0:4] == 'usgs':
-            guess = 'usgs-dv'
-        elif sitename[:-1] == 'L':
-            guess = 'vmm'
-        else:
-            # I don't know what this is.
-            guess = None
-        return guess
-
-    def fetch(self, source=None, start=None, end=None,
+    def fetch(self, series=None, source=None, start=None, end=None,
               period=1, **kwargs):
         """Retrieve data from a source.
 
@@ -126,7 +97,7 @@ class Station(object):
 
         Arguments:
         ---------
-            source ('usgs-iv' | 'usgs-dv'): the data source.
+            source ('usgs' | 'vmm'): the data source.
 
             start (date str): a string to represent the start date. Right now,
                 this is just a string that gets passed to the usgs. It should
@@ -150,90 +121,84 @@ class Station(object):
         Example:
         -------
 
-        >>> HerringRun = Station('01585200')
+        >>> HerringRun = Station('usgs01585200')
         >>> HerringRun.fetch()
 
         Fetches the past 1 day of values.
 
-        >>> StonyRun = Station('01589464')
-        >>> StonyRun.fetch(source='usgs-iv', start='2014-06-01',
+        >>> StonyRun = Station('usgs01589464')
+        >>> StonyRun.fetch(series='realtime', start='2014-06-01',
                            end='2014-06-04')
 
         Fetches instantaneous values with a collection interval of 15 minutes
         for June 1-4, 2014.
         """
-        # Update the dates if they haven't already been set.
-        # TODO: check if the new fetch dates extend the record.
-        # Does the new period cover more recent time than self.end?
-        # Does the new period reach back earlier than self.start?
-        # Is the new end more recent than self.end?
-        # Is the new start earlier than self.start?
-        #
-        # For now, change the dates if they are included.
         if start is not None:
+            # TODO: only alter self.start if start is earlier.
             self.start = start
         if end is not None:
+            # TODO only alter self.end if end is later.
             self.end = end
         if period is not None:
+            # not implemented yet.
             self.period = period
+        if series is None:
+            series = 'dailymean'
 
-        if source is None:
-            if self.source is None:
+        if self.source is None:
+            if source is None:
                 raise hp.HydroSourceError("No source was defined for this "
                                           ".fetch() request. To set a source, "
-                                          "use .fetch(source='usgs-iv') or "
-                                          "another source, such as 'usgs-dv'.")
+                                          "use .fetch(source='usgs') or "
+                                          "another source, such as 'vmm'.")
             else:
-                source = self.source
-        if source == 'usgs-dv':
-            # retrieve usgs data. Save to dailymean as a HydroAnalysis object.
+                self.source = source
+
+        if self.source == 'usgs':
             usgs_id = self.site[4:]
-            df = hp.get_usgs(usgs_id, 'dv', self.start, self.end)
-            self.dailymean = hp.HydroAnalysis(df)
-            self.type = 'dailymean'
-            self.data = self.dailymean
-            self.source = source
-        elif source == 'usgs-iv':
-            # retrieve usgs iv data. Save to realtime.
-            usgs_id = self.site[4:]
-            df = hp.get_usgs(usgs_id, 'iv', self.start, self.end)
-            self.realtime = hp.HydroAnalysis(df)
-            self.type = 'realtime'
-            self.data = self.realtime
-            self.source = source
+            if series == 'dailymean':
+                # Save to dailymean as a HydroAnalysis object.
+                df = hp.get_usgs(usgs_id, 'dv', self.start, self.end)
+                self.dailymean = hp.HydroAnalysis(df)
+            elif series == 'realtime':
+                # retrieve usgs iv data. Save to realtime.
+                df = hp.get_usgs(usgs_id, 'iv', self.start, self.end)
+                self.realtime = hp.HydroAnalysis(df)
+            else:
+                raise hp.HydroSourceError('The series {0} is not recognized.')
         else:
             raise hp.HydroSourceError('The source {0} is not defined.'
-                                      .format(source))
+                                      .format(self.source))
 
         return self
 
-    def pandas(self, data, **kwargs):
-        """Create a station object using the pandas constructor.
-
-                 data=None, # create a dataframe through Pandas.
-                 index=None, # Pandas uses this to create a dataframe.
-                 site=None, # use to identify this Station.
-                 source=None, # Needed to collect data
-                 start=None,
-                 end=None,
-                 period=None,
-                 **kwargs):
-        Initialize a new Station object.
-
-        You can create a new station by passing in a new dataframe or by
-        specifying the source and site id.
-        """
-
-        # if data is None,
-        if data is None:
-            # use the other arguments to retrieve data from a source.
-            pass
-        if isinstance(data, pd.DataFrame):
-            # they sent us a dataframe. I guess there ain't much to do...?
-            # or send this dataframe to pandas.dataframe constructor.
-            pass
-        else:
-            # Send data to Pandas; maybe it will create a dataframe for us.
-            # try:  #Maybe don't catch this error? is the message good enough?
-            # Pandas accepts
-            pass
+#    def pandas(self, data, **kwargs):
+#        """Create a station object using the pandas constructor.
+#
+#                 data=None, # create a dataframe through Pandas.
+#                 index=None, # Pandas uses this to create a dataframe.
+#                 site=None, # use to identify this Station.
+#                 source=None, # Needed to collect data
+#                 start=None,
+#                 end=None,
+#                 period=None,
+#                 **kwargs):
+#        Initialize a new Station object.
+#
+#        You can create a new station by passing in a new dataframe or by
+#        specifying the source and site id.
+#        """
+#
+#        # if data is None,
+#        if data is None:
+#            # use the other arguments to retrieve data from a source.
+#            pass
+#        if isinstance(data, pd.DataFrame):
+#            # they sent us a dataframe. I guess there ain't much to do...?
+#            # or send this dataframe to pandas.dataframe constructor.
+#            pass
+#        else:
+#            # Send data to Pandas; maybe it will create a dataframe for us.
+#            # try:  #Maybe don't catch this error? is the message good enough?
+#            # Pandas accepts
+#            pass
