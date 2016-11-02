@@ -167,7 +167,6 @@ class TestGetUSGS(unittest.TestCase):
         with self.assertRaises(exceptions.HydroNoDataError):
             r3p.extract_nwis_df(fake_response)
 
-
     def test_r3p_extract_nwis_df(self):
         # Does it really make sense to define a class inside of a test function
         class FakeResponse(object):
@@ -183,9 +182,27 @@ class TestGetUSGS(unittest.TestCase):
 
     @unittest.skip("Need to test whether missing values replaced with NaN")
     def test_r3p_extract_nwis_df_replaces_novalues_NaN(self):
-        fail
-        
-        
+        self.fail
+
     @unittest.skip("Need more tests for get_usgs")
     def test_r3p_get_usgs(self):
         self.assertTrue(False)
+
+    def test_r3p_site_parser_returns_txt_txt(self):
+        site_id, source = r3p.site_parser('usgs01585200')
+        self.assertIsInstance(site_id, str)
+        self.assertIsInstance(source, str)
+
+    def test_r3p_site_parser_raises_error_for_unrecognized_input(self):
+        with self.assertRaises(exceptions.HydroSourceError):
+            site_id, source = r3p.site_parser('nonsense')
+
+    def test_r3p_site_parser_recognizes_usgs(self):
+        site_id, source = r3p.site_parser('usgs01585200')
+        self.assertEqual('usgs01585200', site_id)
+        self.assertEqual('usgs', source)
+
+    def test_r3p_site_parser_recognizes_vmm(self):
+        site_id, source = r3p.site_parser('LS06_34E')
+        self.assertEqual('LS06_34E', site_id)
+        self.assertEqual('vmm', source)

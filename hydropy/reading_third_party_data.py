@@ -333,3 +333,34 @@ def extract_nwis_df(response_obj):
     DF.replace(to_replace='-999999', value=np.nan, inplace=True)
 
     return DF
+
+
+def site_parser(site_name):
+    """Figure out the data source from the site_id.
+
+    Args:
+        site_name (str): the name of the site that needs to be parsed.
+
+    Returns:
+        site_id (str): a properly formatted site_id.
+        source (str): the data source
+
+    Raises:
+        HydroSourceError: provides a message that this data source is not
+            recognized.
+    """
+
+    site_name = str(site_name)
+    if site_name[0:4] == 'usgs':
+        source = 'usgs'
+        site_id = site_name
+    elif site_name[0:1] == 'L':
+        source = 'vmm'
+        site_id = site_name
+    else:
+        # I don't know what this is.
+        raise exceptions.HydroSourceError('The name "{0}" is not recognized'
+                                          ' as a valid site-id. Unable to'
+                                          ' guess the source for this site.'
+                                          .format(site_name))
+    return site_id, source
