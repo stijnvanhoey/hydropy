@@ -24,9 +24,6 @@ def get_baseflow_chapman(flowserie, recession_time):
 
     """
 
-    if not isinstance(flowserie, pd.TimeSeries):
-        raise Exception("Not a pd.TimeSerie as input")
-
     secterm = (1.-recession_time)*flowserie/(2.-recession_time)
 
     baseflow = np.empty(flowserie.shape[0])
@@ -55,9 +52,6 @@ def get_baseflow_boughton(flowserie, recession_time, baseflow_index):
     $$Q_b(i) = \frac{k}{1+C}Q_b(i-1) + \frac{C}{1+C}Q(i)$$
 
     """
-
-    if not isinstance(flowserie, pd.TimeSeries):
-        raise Exception("Not a pd.TimeSerie as input")
 
     parC = baseflow_index
 
@@ -89,9 +83,6 @@ def get_baseflow_ihacres(flowserie, recession_time, baseflow_index, alfa):
 
     $\alpha$ < 0.
     """
-
-    if not isinstance(flowserie, pd.TimeSeries):
-        raise Exception("Not a pd.TimeSerie as input")
 
     parC = baseflow_index
 
