@@ -1,22 +1,31 @@
 # -*- coding: utf-8 -*-
 """
 test_baseflow.py
+@author: Martin Roberge
 """
 
 from __future__ import absolute_import, print_function
 import unittest
 
-from hydropy import baseflow
+import numpy as np
+import pandas as pd
+
+import hydropy as hp
+
+time = pd.date_range('1/1/2010', periods=100, freq='D')
+discharge = pd.DataFrame(np.random.randn(len(time)), index=time, columns=['Qtest'])
 
 
 class TestBaseflow(unittest.TestCase):
 
-    def test_baseflow_get_bf_chapman_pass(self):
-        pass
+    def test_baseflow_get_bf_chapman_returns_dataframe(self):
+        actual = hp.get_baseflow_chapman(discharge, 0.0001)
+        self.assertIs(type(actual), pd.DataFrame)
 
-    def test_baseflow_get_bf_chapman_raises_exception_when_fed_bad_data(self):
-        nonsense = "meaningless data"
-        # Note: it might make more sense to make this raise a TypeError
-        # Should also test by feeding a df that is not a time series.
-        with self.assertRaises(Exception):
-            actual = baseflow.get_baseflow_chapman(nonsense, nonsense)
+    def test_baseflow_get_bf_boughton_returns_dataframe(self):
+        actual = hp.get_baseflow_boughton(discharge, 0.5, 0.0001)
+        self.assertIs(type(actual), pd.DataFrame)
+
+    def test_baseflow_get_bf_ihacres_returns_dataframe(self):
+        actual = hp.get_baseflow_ihacres(discharge, 0.5, 0.5, 0.0001)
+        self.assertIs(type(actual), pd.DataFrame)
