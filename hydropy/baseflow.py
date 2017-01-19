@@ -33,7 +33,8 @@ def get_baseflow_chapman(flowserie, recession_time):
         else:
             baseflow[i] = recession_time*baseflow[i-1]/(2.-recession_time) + \
                             secterm.values[i]
-    return pd.TimeSeries(baseflow, index=flowserie.index)
+    baseflow = pd.DataFrame(baseflow, index=flowserie.index)
+    return baseflow
 
 
 def get_baseflow_boughton(flowserie, recession_time, baseflow_index):
@@ -64,7 +65,7 @@ def get_baseflow_boughton(flowserie, recession_time, baseflow_index):
         else:
             baseflow[i] = recession_time*baseflow[i-1]/(1 + parC) + \
                             secterm.values[i]
-    return pd.TimeSeries(baseflow, index=flowserie.index)
+    return pd.DataFrame(baseflow, index=flowserie.index)
 
 
 def get_baseflow_ihacres(flowserie, recession_time, baseflow_index, alfa):
@@ -96,4 +97,4 @@ def get_baseflow_ihacres(flowserie, recession_time, baseflow_index, alfa):
             baseflow[i] = recession_time * baseflow[i-1]/(1 + parC) + \
                             secterm * (flowserie.values[i] +
                                        alfa * flowserie.values[i-1])
-    return pd.TimeSeries(baseflow, index=flowserie.index)
+    return pd.DataFrame(baseflow, index=flowserie.index)
