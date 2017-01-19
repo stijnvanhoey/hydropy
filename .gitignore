@@ -60,3 +60,4 @@ docs/_build/
 *.spyderworkspace
 *.cache
 .eggs/README.txt
+hydropy.cmd
