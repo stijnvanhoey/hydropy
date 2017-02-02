@@ -61,3 +61,6 @@ docs/_build/
 *.cache
 .eggs/README.txt
 hydropy.cmd
+
+# pycharm IDE
+.idea
