@@ -38,6 +38,11 @@ hydropy like this::
 """
 from __future__ import absolute_import, print_function
 
+__version__='v0.1.2'
+__license__='BSD'
+__copyright__ = 'Copyright 2017 Stijn Van Hoey, Martin Roberge, and contributors'
+__title__='hydropy'
+
 from .baseflow import (get_baseflow_chapman,
                        get_baseflow_boughton,
                        get_baseflow_ihacres)
@@ -45,6 +50,3 @@ from .storm import selectstorms, plotstorms
 from .flowanalysis import HydroAnalysis
 from .reading_third_party_data import get_usgs
 from .ipython import draw_map
-
-__license__ = 'BSD'
-__title__ = 'hydropy'
