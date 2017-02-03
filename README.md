@@ -2,8 +2,6 @@
 
 [![Pypi](https://img.shields.io/pypi/v/hydropy.svg)](https://pypi.python.org/pypi/hydropy) [![Build Status](https://img.shields.io/travis/stijnvanhoey/hydropy.svg)](https://travis-ci.org/stijnvanhoey/hydropy) [![License](https://img.shields.io/badge/License-BSD%202--Clause-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
-Analysis of hydrological oriented time series. Basically, the package adds domain-specific functionalities to Pandas DataFrames, while keeping the power of it.
-
 Analysis of hydrological oriented time series.
 
 This package is designed to simplify the collection and analysis of
