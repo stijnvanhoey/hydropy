@@ -1,11 +1,23 @@
-Hydropy
-=======
+# Hydropy
+
+[![Pypi](https://img.shields.io/pypi/v/hydropy.svg)](https://pypi.python.org/pypi/hydropy) [![Build Status](https://img.shields.io/travis/stijnvanhoey/hydropy.svg)](https://travis-ci.org/stijnvanhoey/hydropy) [![License](https://img.shields.io/badge/License-BSD%202--Clause-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
 Analysis of hydrological oriented time series. Basically, the package adds domain-specific functionalities to Pandas DataFrames, while keeping the power of it.
 
-* Free software: BSD license
+Analysis of hydrological oriented time series.
 
-Examples are:
+This package is designed to simplify the collection and analysis of
+hydrology data.  Use HydroPy in a Jupyter
+notebook and save your analysis so that you can recreate your procedures and
+share them with others.  
+
+Hydropy uses the power of Numpy and Pandas to quickly process large datasets. 
+Matplotlib and Seaborn are built-in to Hydropy, allowing you to create
+publication-ready diagrams quickly and easily.
+
+Try Hydropy in a notebook: [hydropy_tutorial.ipynb](https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb)
+
+## Example:
 
     # Recession periods in June 2011:
     myflowserie.get_year('2011').get_month("Jun").get_recess()
@@ -22,7 +34,7 @@ Examples are:
 
 ![Selected storms](./data/storms.png)
 
-A more extended tutorial/introduction is provided in a ipython notebook. See the output at http://nbviewer.ipython.org/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
+A more extended tutorial/introduction is provided in a ipython notebook: [hydropy_tutorial.ipynb](https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb)
 
 We acknowledge the Flemish Environmental Agency (VMM) for the data used in the tutorial. It can be downloaded from http://www.waterinfo.be/.
 
@@ -46,4 +58,4 @@ The slides version of the notebook was made with nbconvert (using reveal.js), by
 http://nbviewer.ipython.org/format/slides/github/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb#/
 
 
-Copyright (c) 2015, Stijn Van Hoey
+Copyright (c) 2015-2017 Stijn Van Hoey, Martin Roberge, and Contributors
