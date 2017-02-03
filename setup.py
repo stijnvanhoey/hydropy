@@ -2,10 +2,17 @@
 from __future__ import absolute_import
 from setuptools import setup
 
+with open('README.md') as readme_file:
+      readme = readme_file.read()
+
+with open('AUTHORS.rst') as authors_file:
+      authors = authors_file.read()
+
 setup(name='hydropy',
-      version='0.1.1',
+      version='0.1.2',
       description='Analysis of hydrological oriented time series',
-      url='https://stijnvanhoey.github.io/hydropy/',
+      long_description=readme + '\n\n' + authors,
+      url='https://github.com/stijnvanhoey/hydropy/',
       author='Stijn Van Hoey',
       author_email='stijnvanhoey@gmail.com',
       license='BSD',
