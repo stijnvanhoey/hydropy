@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from setuptools import setup
 
 setup(name='hydropy',
-      version='0.1',
+      version='0.1.1',
       description='Analysis of hydrological oriented time series',
       url='https://stijnvanhoey.github.io/hydropy/',
       author='Stijn Van Hoey',
