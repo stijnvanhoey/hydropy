@@ -14,6 +14,7 @@ Hydropy
         :target: https://opensource.org/licenses/BSD-2-Clause
         :alt: BSD-2-Clause
 
+
 Analysis of hydrological oriented time series.
 
 This package is designed to simplify the collection and analysis of
@@ -24,8 +25,8 @@ Hydropy uses the power of Numpy and Pandas to quickly process large datasets.
 Matplotlib and Seaborn are built-in to Hydropy, allowing you to create
 publication-ready diagrams quickly and easily.
 
-Try Hydropy in a notebook: `hydropy_tutorial.ipynb`_
-.. _`hydropy_tutorial.ipynb`: https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
+Try Hydropy in a notebook: hydropy_tutorial.ipynb_
+.. _hydropy_tutorial.ipynb: https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
 
 Example:
 --------
@@ -56,13 +57,11 @@ Example:
 .. image:: ./data/storms.png
         :alt: Selected storms
 
-A more extended tutorial/introduction is provided in a ipython notebook: `hydropy_tutorial.ipynb`_
+A more extended tutorial/introduction is provided in a ipython notebook: hydropy_tutorial.ipynb_
 
-.. `hydropy_tutorial.ipynb`_: https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
+.. hydropy_tutorial.ipynb_: https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
 
-We acknowledge the Flemish Environmental Agency (VMM) for the data used in the tutorial. It can be downloaded from `http://www.waterinfo.be/`_.
-
-.. http://www.waterinfo.be/_: http://www.waterinfo.be/
+We acknowledge the Flemish Environmental Agency (VMM) for the data used in the tutorial. It can be downloaded from http://www.waterinfo.be/.
 
 To install this, git clone the repo and then install it by::
 
