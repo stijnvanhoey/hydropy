@@ -26,6 +26,7 @@ Matplotlib and Seaborn are built-in to Hydropy, allowing you to create
 publication-ready diagrams quickly and easily.
 
 Try Hydropy in a notebook: hydropy_tutorial.ipynb_
+
 .. _hydropy_tutorial.ipynb: https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
 
 Example:
@@ -59,7 +60,7 @@ Example:
 
 A more extended tutorial/introduction is provided in a ipython notebook: hydropy_tutorial.ipynb_
 
-.. hydropy_tutorial.ipynb_: https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
+.. _hydropy_tutorial.ipynb: https://github.com/stijnvanhoey/hydropy/blob/master/hydropy_tutorial.ipynb
 
 We acknowledge the Flemish Environmental Agency (VMM) for the data used in the tutorial. It can be downloaded from http://www.waterinfo.be/.
 
